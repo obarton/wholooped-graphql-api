@@ -1,0 +1,69 @@
+type Loopmaker {
+  id: ID!
+  name: String!
+}
+
+type LoopPack {
+  id: ID!
+  title: String!
+  releaseDate: AWSDateTime
+  url: String
+  slug: String!
+  loopmaker: [Loopmaker]
+}
+
+type Song {
+  id: ID!
+  title: String!
+  url: String!
+  loopStartTimeSeconds: Int!
+  isActive: Boolean!
+  slug: String!
+  isFeatured: Boolean!
+  artist: [Artist]
+}
+
+type Artist {
+  id: ID!
+  name: String!
+  viewCount: Int
+  slug: String!
+}
+
+type Like {
+  id: ID!
+  userId: String!
+  itemId: String!
+  createdAt: AWSDateTime
+}
+
+type isLiked {
+  isLiked: Boolean!
+}
+
+input LikeInput {
+  id: ID!
+  userId: String!
+  itemId: String!
+  createdAt: AWSDateTime
+}
+
+input UpdateLikeInput {
+  id: ID!
+  userId: String!
+  itemId: String!
+}
+
+type Query {
+  listLikes(userId: String!): [Like]
+  getLikeById(userId: String!, itemId: String!): isLiked
+  listSongs: [Song]
+  listArtists: [Artist]
+  listLoopPacks: [LoopPack]
+}
+
+type Mutation {
+  createLike(like: LikeInput!): Like
+  deleteLike(userId: String!, itemId: String!): String
+  updateLike(like: UpdateLikeInput!): Like
+}
