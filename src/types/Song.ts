@@ -1,4 +1,5 @@
 import Artist from "./Artist"
+import Album from "./Album"
 
 type Song = {
     id: string
@@ -9,6 +10,7 @@ type Song = {
     slug: string
     isFeatured: boolean
     artist: Artist[]
+    album: Album
 }
 
 export default Song;

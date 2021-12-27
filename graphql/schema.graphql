@@ -9,6 +9,7 @@ type LoopPack {
   releaseDate: AWSDateTime
   url: String
   slug: String!
+  imageUrl: String
   loopmaker: [Loopmaker]
 }
 
@@ -21,6 +22,7 @@ type Song {
   slug: String!
   isFeatured: Boolean!
   artist: [Artist]
+  album: Album
 }
 
 type Artist {
@@ -28,6 +30,20 @@ type Artist {
   name: String!
   viewCount: Int
   slug: String!
+  photo: Image?
+}
+
+type Album {
+  id: String
+  title: String
+  url: String
+  artwork: Image
+}
+
+type Image {
+  id: String
+  title: String
+  url: String
 }
 
 type Like {

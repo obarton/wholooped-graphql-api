@@ -21,7 +21,8 @@ export default async function listSongs(): Promise<Song[] | null> {
                 isActive,
                 slug,
                 isFeatured,
-                artist
+                artist,
+                album
             } = song.fields;
             
             return {
@@ -42,11 +43,19 @@ export default async function listSongs(): Promise<Song[] | null> {
                         viewCount,
                         slug
                     }
-                })
+                }),
+                album: {
+                    id: album?.sys.id,
+                    title: album.fields.title,
+                    url: "",
+                    artwork: {
+                        id: album.fields.artwork.sys.id,
+                        url: album.fields.artwork.fields.file.url ? `https:${album.fields.artwork.fields.file.url}` : "",
+                        title: album.fields.artwork.fields.title
+                    }
+                }
             }
         })
-
-        console.log(`listSongsResponse ${JSON.stringify(listSongsResponse, null, 2)}`);
         
         return listSongsResponse;
     } catch (error) {

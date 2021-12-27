@@ -13,17 +13,20 @@ export default async function listArtists(): Promise<Artist[] | null> {
 
         const listArtistsResponse = artistEntriesResponse.items.map((artist: any): Artist => {
             const { id } = artist.sys;
-            const { name, viewCount, slug } = artist.fields;
+            const { name, viewCount, slug, photo } = artist.fields;
 
             return {
                 id,
                 name,
                 viewCount,
-                slug
+                slug,
+                photo: {
+                    id: photo.sys.id,
+                    title: photo.fields.title,
+                    url: photo.fields.file.url ? `https:${photo.fields.file.url}` : ""
+                }
             }
         })
-
-        console.log(`listArtistsResponse ${JSON.stringify(listArtistsResponse, null, 2)}`);
         
         return listArtistsResponse;
     } catch (error) {

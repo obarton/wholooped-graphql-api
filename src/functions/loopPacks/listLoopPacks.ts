@@ -10,15 +10,12 @@ export default async function listLoopPacks(): Promise<LoopPack[] | null> {
 
         const loopPackEntriesResponse = await client.getEntries({
             content_type: 'loopPack'
-          })
-
-        
+          })   
 
         const listLoopPacksResponse = loopPackEntriesResponse.items?.map((loopPack: any): LoopPack => {
             const { id } = loopPack.sys;
-            const { title, url, releaseDate, slug, loopmaker } = loopPack.fields;
-
-            console.log(`loopPack.fields ${JSON.stringify(loopPack.fields, null, 2)}`);
+            const { title, url, releaseDate, slug, loopmaker, artwork } = loopPack.fields;
+            const imageUrl = artwork.fields.file?.url ? `https:${artwork.fields.file?.url}` : "";
 
             return {
                 id,
@@ -26,11 +23,10 @@ export default async function listLoopPacks(): Promise<LoopPack[] | null> {
                 url,
                 releaseDate,
                 slug,
+                imageUrl,
                 loopmaker: loopmaker?.map((loopmaker: any): Loopmaker => {
                     const { id } = loopmaker.sys;
                     const { name } = loopmaker.fields;
-
-
 
                     return {
                         id,
