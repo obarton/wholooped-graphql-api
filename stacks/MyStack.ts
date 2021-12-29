@@ -30,7 +30,8 @@ export default class MyStack extends sst.Stack {
         loopPacks: "src/handlers/loopPacks.handler",
         likes: "src/handlers/likes.handler",
         songs: "src/handlers/songs.handler",
-        artists: "src/handlers/artists.handler"
+        artists: "src/handlers/artists.handler",
+        userProfile: "src/handlers/userProfile.handler"
       },
       resolvers: {
         "Query    listLikes": "likes",
@@ -39,8 +40,10 @@ export default class MyStack extends sst.Stack {
         "Mutation updateLike": "likes",
         "Mutation deleteLike": "likes",
         "Query    listSongs": "songs",
+        "Query    querySongByArtist": "songs",
         "Query    listArtists": "artists",
         "Query    listLoopPacks": "loopPacks",
+        "Query    getUserProfileById": "userProfile",
       },
     });
 

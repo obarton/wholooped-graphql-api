@@ -6,7 +6,7 @@ type LoopPack = {
     releaseDate: string
     url: string
     slug: string
-    imageUrl: string
+    imageUrl: string | null
     loopmaker: Loopmaker[]
 }
 

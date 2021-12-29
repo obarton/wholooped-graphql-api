@@ -2,6 +2,7 @@
 import LoopPack from "../../types/LoopPack"
 import Loopmaker from "../../types/Loopmaker"
 import { getClient } from "../../contentful/client"
+import { convertContentfulFileUrlToImageUrl } from "../../helper/image";
 
 export default async function listLoopPacks(): Promise<LoopPack[] | null> {
 
@@ -15,7 +16,7 @@ export default async function listLoopPacks(): Promise<LoopPack[] | null> {
         const listLoopPacksResponse = loopPackEntriesResponse.items?.map((loopPack: any): LoopPack => {
             const { id } = loopPack.sys;
             const { title, url, releaseDate, slug, loopmaker, artwork } = loopPack.fields;
-            const imageUrl = artwork.fields.file?.url ? `https:${artwork.fields.file?.url}` : "";
+            const imageUrl = convertContentfulFileUrlToImageUrl(artwork.fields.file?.url)
 
             return {
                 id,

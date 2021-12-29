@@ -1,6 +1,6 @@
 type Loopmaker {
   id: ID!
-  name: String!
+  name: String
 }
 
 type LoopPack {
@@ -23,6 +23,24 @@ type Song {
   isFeatured: Boolean!
   artist: [Artist]
   album: Album
+  loop: [Loop]
+  platform: Platform
+}
+
+type Platform {
+  id: ID
+  name: String
+}
+
+type Loop {
+  id: ID
+  title: String
+  url: String
+  releaseDate: String
+  isActive: Boolean
+  slug: String
+  loopmaker: Loopmaker
+  platform: Platform
 }
 
 type Artist {
@@ -57,6 +75,21 @@ type isLiked {
   isLiked: Boolean!
 }
 
+type UserProfile {
+  id: ID!
+  authId: String!
+  name: String!
+  slug: String!
+  photo: Image
+  bio: String
+  attributes: [Attribute]
+}
+
+type Attribute {
+  id: ID!
+  name: String
+}
+
 input LikeInput {
   id: ID!
   userId: String!
@@ -71,11 +104,13 @@ input UpdateLikeInput {
 }
 
 type Query {
-  listLikes(userId: String!): [Like]
+  listLikes(userId: String!): [Song]
   getLikeById(userId: String!, itemId: String!): isLiked
   listSongs: [Song]
   listArtists: [Artist]
   listLoopPacks: [LoopPack]
+  getUserProfileById: UserProfile
+  querySongByArtist(artistSlug: String!, songSlug: String!): Song
 }
 
 type Mutation {

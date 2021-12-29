@@ -5,6 +5,7 @@ import createLike from "../functions/likes/createLike";
 import updateLike from "../functions/likes/updateLike";
 import deleteLike from "../functions/likes/deleteLike";
 import getLikeById from "../functions/likes/getLikeById";
+import Song from "../types/Song";
 
 type AppSyncEvent = {
   info: {
@@ -20,7 +21,7 @@ type AppSyncEvent = {
 
 export async function handler(
   event: AppSyncEvent
-): Promise<Record<string, unknown>[] | Like | IsLiked | string | null | undefined> {
+): Promise<Song[] | Like | IsLiked | string | null | undefined> {
   switch (event.info.fieldName) {
     case "listLikes":
       return await listLikes(event.arguments.userId);

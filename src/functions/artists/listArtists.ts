@@ -1,6 +1,7 @@
 
 import Artist from "../../types/Artist"
 import { getClient } from "../../contentful/client"
+import { convertContentfulFileUrlToImageUrl } from "../../helper/image";
 
 export default async function listArtists(): Promise<Artist[] | null> {
 
@@ -23,7 +24,7 @@ export default async function listArtists(): Promise<Artist[] | null> {
                 photo: {
                     id: photo.sys.id,
                     title: photo.fields.title,
-                    url: photo.fields.file.url ? `https:${photo.fields.file.url}` : ""
+                    url: convertContentfulFileUrlToImageUrl(photo.fields.file.url)
                 }
             }
         })
