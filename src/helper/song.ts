@@ -29,7 +29,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         isFeatured,
         platform: {
             id: platform?.sys.id,
-            name: platform?.fields.name
+            name: platform?.fields?.name || ""
         },
         artist: artist.map((artist: any): Artist => {
             const { id } = artist.sys;
@@ -71,7 +71,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                 }),
                 platform: {
                     id: platform?.sys.id,
-                    name: platform?.fields.name
+                    name: platform?.fields?.name || ""
                 }
             }
         })
