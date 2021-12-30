@@ -40,6 +40,7 @@ export default class MyStack extends sst.Stack {
         "Mutation updateLike": "likes",
         "Mutation deleteLike": "likes",
         "Query    listSongs": "songs",
+        "Query    getSongById": "songs",
         "Query    querySongByArtist": "songs",
         "Query    listArtists": "artists",
         "Query    listLoopPacks": "loopPacks",

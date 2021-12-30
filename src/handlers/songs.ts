@@ -1,4 +1,5 @@
 import listSongs from "../functions/songs/listSongs";
+import getSongById from "../functions/songs/getSongById";
 import querySongByArtist from "../functions/songs/querySongByArtist"
 import Song from "../types/Song";
 
@@ -8,6 +9,7 @@ type AppSyncEvent = {
   };
   arguments: {
     userId: string;
+    songId: string;
     artistSlug: string;
     songSlug: string;
   };
@@ -19,6 +21,8 @@ export async function handler(
   switch (event.info.fieldName) {
     case "listSongs":
       return await listSongs();
+    case "getSongById":
+      return await getSongById(event.arguments.songId);
     case "querySongByArtist":
       return await querySongByArtist(event.arguments.artistSlug, event.arguments.songSlug);
     default:

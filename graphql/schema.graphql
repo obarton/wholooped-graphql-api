@@ -1,5 +1,5 @@
 type Loopmaker {
-  id: ID!
+  id: ID
   name: String
 }
 
@@ -30,6 +30,7 @@ type Song {
 type Platform {
   id: ID
   name: String
+  trackId: String
 }
 
 type Loop {
@@ -39,7 +40,7 @@ type Loop {
   releaseDate: String
   isActive: Boolean
   slug: String
-  loopmaker: Loopmaker
+  loopmaker: [Loopmaker]
   platform: Platform
 }
 
@@ -107,6 +108,7 @@ type Query {
   listLikes(userId: String!): [Song]
   getLikeById(userId: String!, itemId: String!): isLiked
   listSongs: [Song]
+  getSongById(songId: String!): Song
   listArtists: [Artist]
   listLoopPacks: [LoopPack]
   getUserProfileById: UserProfile
