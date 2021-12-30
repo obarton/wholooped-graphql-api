@@ -42,6 +42,7 @@ type Loop {
   slug: String
   loopmaker: [Loopmaker]
   platform: Platform
+  loopPack: LoopPack
 }
 
 type Artist {

@@ -30,7 +30,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         isFeatured: false,
         platform: {
             id: platform?.sys.id,
-            name: platform?.fields?.name || "",
+            name: platform?.fields?.name,
             trackId: platformTrackId
         },
         artist: artist?.map((artist: any): Artist => {
@@ -57,7 +57,8 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         loop: loop?.map((loop: any): Loop => {
             const { id } = loop.sys;
             const { title, url, releaseDate, isActive, loopmaker, slug, platform} = loop.fields;
-            
+    
+
             return {
                 id,
                 title,
@@ -68,14 +69,14 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                 loopmaker: loopmaker?.map((loopmaker: any): Loopmaker => {
                     return {
                         id: loopmaker?.sys.id,
-                        name: loopmaker?.fields?.name || ""
+                        name: loopmaker?.fields?.name
                     }
                 }),
                 platform: {
                     id: platform?.sys.id,
-                    name: platform?.fields?.name || "",
+                    name: platform?.fields?.name,
                     trackId: platformTrackId
-                }
+                },
             }
         }),
         loopmaker: []

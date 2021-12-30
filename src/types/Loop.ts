@@ -1,3 +1,4 @@
+import LoopPack from "./LoopPack";
 import Platform from "./Platform";
 
 type Loop = {
@@ -9,6 +10,7 @@ type Loop = {
     loopmaker: any
     slug: string
     platform: Platform
+    loopPack: LoopPack
 }
 
 export default Loop;
