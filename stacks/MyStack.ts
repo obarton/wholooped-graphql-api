@@ -13,6 +13,15 @@ export default class MyStack extends sst.Stack {
       primaryIndex: { partitionKey: "userId", sortKey: "itemId" },
     });
 
+    // Create a likes Count table
+    const likesCountTable = new sst.Table(this, "LikesCount", {
+      fields: {
+        itemId: sst.TableFieldType.STRING,
+        count: sst.TableFieldType.NUMBER
+      },
+      primaryIndex: { partitionKey: "itemId" },
+    })
+
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
       graphqlApi: {
@@ -22,6 +31,7 @@ export default class MyStack extends sst.Stack {
         // Pass the table name to the function
         environment: {
           LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
           CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
           CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string
         },
@@ -49,7 +59,7 @@ export default class MyStack extends sst.Stack {
     });
 
     // Enable the AppSync API to access the DynamoDB table
-    api.attachPermissions([likesTable]);
+    api.attachPermissions([likesTable, likesCountTable]);
 
     // Show the AppSync API Id in the output
     this.addOutputs({

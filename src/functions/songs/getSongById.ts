@@ -15,8 +15,6 @@ export default async function getSongById(songId: string): Promise<Song | null> 
         const loopId = (response as any).fields.loop[0].sys.id;
         const loopResponse = await client.getEntry(loopId);
 
-        console.log(`loopResponse ${JSON.stringify(loopResponse, null, 2)}`);
-
         // map to response object
         const songObj = mapContentfulSongResponseObjToSongObj(response);
         songObj.loop = mapContentfulLoopResponseToLoopObj(loopResponse)

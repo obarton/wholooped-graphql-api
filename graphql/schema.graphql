@@ -1,6 +1,12 @@
+type Producer {
+  id: ID
+  name: String
+}
+
 type Loopmaker {
   id: ID
   name: String
+  slug: String
 }
 
 type LoopPack {
@@ -25,6 +31,9 @@ type Song {
   album: Album
   loop: [Loop]
   platform: Platform
+  producer: [Producer]
+  likesCount: Int
+  isLiked: Boolean
 }
 
 type Platform {

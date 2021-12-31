@@ -23,6 +23,7 @@ export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any):
         loopmaker: [{
             id: loopmaker[0].sys.id,
             name: loopmaker[0].fields.name,
+            slug: loopmaker[0].fields.slug
         }],
         slug: slug,
         platform: {

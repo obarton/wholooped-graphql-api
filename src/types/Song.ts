@@ -3,6 +3,7 @@ import Album from "./Album"
 import Loop from "./Loop"
 import Platform from "./Platform"
 import Loopmaker from "./Loopmaker"
+import Producer from "./Producer"
 
 type Song = {
     id: string
@@ -17,6 +18,9 @@ type Song = {
     album: Album
     loop: Loop[]
     loopmaker: Loopmaker[]
+    producer: Producer[]
+    likesCount: number
+    isLiked?: boolean
 }
 
 export default Song;

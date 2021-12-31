@@ -27,11 +27,12 @@ export default async function listLoopPacks(): Promise<LoopPack[] | null> {
                 imageUrl,
                 loopmaker: loopmaker?.map((loopmaker: any): Loopmaker => {
                     const { id } = loopmaker.sys;
-                    const { name } = loopmaker.fields;
+                    const { name, slug } = loopmaker.fields;
 
                     return {
                         id,
                         name,
+                        slug,
                     }
                 })
             }

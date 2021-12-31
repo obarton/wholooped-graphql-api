@@ -10,7 +10,7 @@ type Loop = {
     loopmaker: any
     slug: string
     platform: Platform
-    loopPack: LoopPack
+    loopPack: LoopPack | null
 }
 
 export default Loop;

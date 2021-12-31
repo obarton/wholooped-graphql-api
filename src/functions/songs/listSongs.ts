@@ -11,8 +11,6 @@ export default async function listSongs(): Promise<Song[] | null> {
         const songEntriesResponse = await client.getEntries({
             content_type: 'song'
           })
-        
-        console.log(`songEntriesResponse.items[0] ${JSON.stringify(songEntriesResponse.items[0], null, 2)}`);
           
         const listSongsResponse = songEntriesResponse.items.map((song: any): Song => {
             return mapContentfulSongResponseObjToSongObj(song)

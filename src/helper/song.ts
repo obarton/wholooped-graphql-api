@@ -1,12 +1,14 @@
 import Artist from "../types/Artist";
 import Loop from "../types/Loop";
 import Loopmaker from "../types/Loopmaker";
+import Producer from "../types/Producer";
 import Song from "../types/Song";
 import { convertContentfulFileUrlToImageUrl } from "./image";
 
 export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj: any): Song => {
     const { id } = contentfulSongResponseObj.sys;
     const {
+        producer,
         platformTrackId,
         platform, 
         title,
@@ -28,6 +30,8 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         isActive,
         slug,
         isFeatured: false,
+        likesCount: 10,
+        isLiked: true,
         platform: {
             id: platform?.sys.id,
             name: platform?.fields?.name,
@@ -58,7 +62,6 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
             const { id } = loop.sys;
             const { title, url, releaseDate, isActive, loopmaker, slug, platform} = loop.fields;
     
-
             return {
                 id,
                 title,
@@ -69,7 +72,8 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                 loopmaker: loopmaker?.map((loopmaker: any): Loopmaker => {
                     return {
                         id: loopmaker?.sys.id,
-                        name: loopmaker?.fields?.name
+                        name: loopmaker?.fields?.name,
+                        slug: loopmaker?.fields?.slug
                     }
                 }),
                 platform: {
@@ -77,9 +81,16 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                     name: platform?.fields?.name,
                     trackId: platformTrackId
                 },
+                loopPack: null
             }
         }),
-        loopmaker: []
+        loopmaker: [],
+        producer: producer?.map((producer:any): Producer => {
+            return {
+                id: producer?.sys.id,
+                name: producer?.fields?.name
+            }
+        })
     }  
 
     return songObj;
