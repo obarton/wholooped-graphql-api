@@ -30,7 +30,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         isActive,
         slug,
         isFeatured: false,
-        likesCount: 10,
+        likesCount: 0,
         isLiked: true,
         platform: {
             id: platform?.sys.id,

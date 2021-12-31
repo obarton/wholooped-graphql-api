@@ -19,7 +19,7 @@ type Song = {
     loop: Loop[]
     loopmaker: Loopmaker[]
     producer: Producer[]
-    likesCount: number
+    likesCount?: number
     isLiked?: boolean
 }
 
