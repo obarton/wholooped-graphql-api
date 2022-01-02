@@ -11,14 +11,14 @@ export default async function createLike(like: Like): Promise<Like> {
   like.createdAt = currentDateTime; // Current Unix timestamp  
 
   const item = await client.send(new GetItemCommand({
-    TableName: process.env.LIKES_COUNT_TABLE as string,
+    TableName: process.env.LIKES_COUNT_TABLE as string,//"dev-wholooped-graphql-appsync-LikesCount", //process.env.LIKES_COUNT_TABLE as string,
     Key: marshall({itemId: like.itemId }),
   }));
   
   if (!item.Item) {
     // initialize count to 0
     await client.send(new PutItemCommand({
-      TableName: process.env.LIKES_COUNT_TABLE as string,
+      TableName: process.env.LIKES_COUNT_TABLE as string,//"dev-wholooped-graphql-appsync-LikesCount", //process.env.LIKES_COUNT_TABLE as string,
       Item: marshall({itemId: like.itemId, count: 0}),
       ConditionExpression: "attribute_not_exists(#pk)",
       ExpressionAttributeNames: {"#pk": "itemId"},
@@ -30,7 +30,7 @@ const transactionResponse = await client.send(new TransactWriteItemsCommand({
 	TransactItems: [
 		{
 			Put: {
-				TableName: process.env.LIKES_TABLE,
+				TableName: process.env.LIKES_TABLE,//"dev-wholooped-graphql-appsync-Likes",//process.env.LIKES_TABLE,
 				// ConditionExpression: "attribute_not_exists(#iid)",
 				// ExpressionAttributeNames: {"#iid": "itemId"},
 				Item: marshall(like),
@@ -38,7 +38,7 @@ const transactionResponse = await client.send(new TransactWriteItemsCommand({
 		},
 		{
 			Update: {
-				TableName: process.env.LIKES_COUNT_TABLE,
+				TableName: process.env.LIKES_COUNT_TABLE, //"dev-wholooped-graphql-appsync-LikesCount",//process.env.LIKES_COUNT_TABLE,
 				UpdateExpression: "ADD #count :count",
 				ExpressionAttributeNames: {"#count": "count"},
 				ExpressionAttributeValues: marshall({":count": 1}),

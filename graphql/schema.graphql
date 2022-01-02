@@ -1,3 +1,13 @@
+# input InteractionInput {
+#   interactionType: String
+#   data: Like
+# }
+
+# type Interaction {
+#   interactionType: String
+#   data: Like
+# }
+
 type Producer {
   id: ID
   name: String
@@ -129,4 +139,5 @@ type Mutation {
   createLike(like: LikeInput!): Like
   deleteLike(userId: String!, itemId: String!): String
   updateLike(like: UpdateLikeInput!): Like
+  # sendInteraction(interaction: InteractionInput): Interaction
 }
