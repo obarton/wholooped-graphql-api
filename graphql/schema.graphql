@@ -1,15 +1,15 @@
-type Producer {
+type Producer @aws_api_key {
   id: ID
   name: String
 }
 
-type Loopmaker {
+type Loopmaker @aws_api_key {
   id: ID
   name: String
   slug: String
 }
 
-type LoopPack {
+type LoopPack @aws_api_key {
   id: ID!
   title: String!
   releaseDate: AWSDateTime
@@ -19,7 +19,7 @@ type LoopPack {
   loopmaker: [Loopmaker]
 }
 
-type Song {
+type Song @aws_api_key {
   id: ID!
   title: String!
   url: String!
@@ -36,13 +36,13 @@ type Song {
   isLiked: Boolean
 }
 
-type Platform {
+type Platform @aws_api_key {
   id: ID
   name: String
   trackId: String
 }
 
-type Loop {
+type Loop @aws_api_key {
   id: ID
   title: String
   url: String
@@ -54,7 +54,7 @@ type Loop {
   loopPack: LoopPack
 }
 
-type Artist {
+type Artist @aws_api_key {
   id: ID!
   name: String!
   viewCount: Int
@@ -62,31 +62,31 @@ type Artist {
   photo: Image?
 }
 
-type Album {
+type Album @aws_api_key {
   id: String
   title: String
   url: String
   artwork: Image
 }
 
-type Image {
+type Image @aws_api_key {
   id: String
   title: String
   url: String
 }
 
-type Like {
+type Like @aws_api_key {
   id: ID!
   userId: String!
   itemId: String!
   createdAt: AWSDateTime
 }
 
-type isLiked {
+type isLiked @aws_api_key {
   isLiked: Boolean!
 }
 
-type UserProfile {
+type UserProfile @aws_api_key {
   id: ID!
   authId: String!
   name: String!
@@ -96,37 +96,37 @@ type UserProfile {
   attributes: [Attribute]
 }
 
-type Attribute {
+type Attribute @aws_api_key {
   id: ID!
   name: String
 }
 
-input LikeInput {
+input LikeInput @aws_api_key {
   id: ID!
   userId: String!
   itemId: String!
   createdAt: AWSDateTime
 }
 
-input UpdateLikeInput {
+input UpdateLikeInput @aws_api_key {
   id: ID!
   userId: String!
   itemId: String!
 }
 
 type Query {
-  listLikes(userId: String!): [Song]
-  getLikeById(userId: String!, itemId: String!): isLiked
-  listSongs: [Song]
-  getSongById(userId: String!, songId: String!): Song
-  listArtists: [Artist]
-  listLoopPacks: [LoopPack]
-  getUserProfileById: UserProfile
-  querySongByArtist(artistSlug: String!, songSlug: String!): Song
+  listLikes(userId: String!): [Song] @aws_api_key
+  getLikeById(userId: String!, itemId: String!): isLiked @aws_api_key
+  listSongs: [Song] @aws_api_key
+  getSongById(userId: String!, songId: String!): Song @aws_api_key
+  listArtists: [Artist] @aws_api_key
+  listLoopPacks: [LoopPack] @aws_api_key
+  getUserProfileById: UserProfile @aws_api_key
+  querySongByArtist(artistSlug: String!, songSlug: String!): Song @aws_api_key
 }
 
 type Mutation {
-  createLike(like: LikeInput!): Like
-  deleteLike(userId: String!, itemId: String!): String
-  updateLike(like: UpdateLikeInput!): Like
+  createLike(like: LikeInput!): Like @aws_api_key
+  deleteLike(userId: String!, itemId: String!): String @aws_api_key
+  updateLike(like: UpdateLikeInput!): Like @aws_api_key
 }
