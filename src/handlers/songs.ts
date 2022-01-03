@@ -22,7 +22,7 @@ export async function handler(
     case "listSongs":
       return await listSongs();
     case "getSongById":
-      return await getSongById(event.arguments.songId);
+      return await getSongById(event.arguments.userId, event.arguments.songId);
     case "querySongByArtist":
       return await querySongByArtist(event.arguments.artistSlug, event.arguments.songSlug);
     default:

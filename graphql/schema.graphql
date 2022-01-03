@@ -118,7 +118,7 @@ type Query {
   listLikes(userId: String!): [Song]
   getLikeById(userId: String!, itemId: String!): isLiked
   listSongs: [Song]
-  getSongById(songId: String!): Song
+  getSongById(userId: String!, songId: String!): Song
   listArtists: [Artist]
   listLoopPacks: [LoopPack]
   getUserProfileById: UserProfile
