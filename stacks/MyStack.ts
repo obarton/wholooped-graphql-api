@@ -22,6 +22,46 @@ export default class MyStack extends sst.Stack {
       primaryIndex: { partitionKey: "itemId" },
     })
 
+    // Create Topic
+    const likedTopic = new sst.Topic(this, "Liked", {
+      subscribers: ["src/persistLike.main"],
+    });
+
+    // Create the HTTP API
+    const interactionsApi = new sst.Api(this, "InteractionsApi", {
+      defaultFunctionProps: {
+        // Pass in the topic arn to our API
+        environment: {
+          topicArn: likedTopic.snsTopic.topicArn,
+          LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+        },
+      },
+      routes: {
+        "POST /like": "src/like.main",
+      },
+    });
+
+    // Create Queue
+    const queue = new sst.Queue(this, "Queue", {
+      consumer: "src/interactionsQueueConsumer.main",
+    });
+
+    // Create the HTTP API
+    const queueApi = new sst.Api(this, "QueueApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          queueUrl: queue.sqsQueue.queueUrl,
+          LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+        },
+      },
+      routes: {
+        "POST /": "src/interactionsQueue.main",
+      },
+    });
+
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
       graphqlApi: {
@@ -30,6 +70,8 @@ export default class MyStack extends sst.Stack {
       defaultFunctionProps: {
         // Pass the table name to the function
         environment: {
+          topicArn: likedTopic.snsTopic.topicArn,
+          queueUrl: queue.sqsQueue.queueUrl,
           LIKES_TABLE: likesTable.dynamodbTable.tableName,
           LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
           CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
@@ -60,10 +102,16 @@ export default class MyStack extends sst.Stack {
 
     // Enable the AppSync API to access the DynamoDB table
     api.attachPermissions([likesTable, likesCountTable]);
+    interactionsApi.attachPermissions([likesTable, likesCountTable, queue, likedTopic])
+    queueApi.attachPermissions([likesTable, likesCountTable, queue, likedTopic]);
 
     // Show the AppSync API Id in the output
     this.addOutputs({
+      LikesTable: likesTable.dynamodbTable.tableName,
+      LikesCountTable: likesCountTable.dynamodbTable.tableName,
       ApiId: api.graphqlApi.apiId,
+      InteractionsApiEndpoint: interactionsApi.url,
+      QueueApiEndpoint: queueApi.url,
     });
   }
 }

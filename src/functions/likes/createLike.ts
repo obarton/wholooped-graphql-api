@@ -2,6 +2,7 @@ import { DynamoDB } from "aws-sdk";
 import {DynamoDBClient, GetItemCommand, PutItemCommand, TransactWriteItemsCommand, paginateScan, BatchWriteItemCommand} from "@aws-sdk/client-dynamodb";
 import Like from "../../types/Like";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { v4 as uuidv4 } from 'uuid';
 
 const dynamoDb = new DynamoDB.DocumentClient();
 const client = new DynamoDBClient({ region: "us-west-2"});
@@ -9,6 +10,7 @@ const client = new DynamoDBClient({ region: "us-west-2"});
 export default async function createLike(like: Like): Promise<Like> {
   const currentDateTime = new Date(Date.now()).toISOString()
   like.createdAt = currentDateTime; // Current Unix timestamp  
+  like.id = uuidv4();
 
   const item = await client.send(new GetItemCommand({
     TableName: process.env.LIKES_COUNT_TABLE as string,

@@ -18,7 +18,8 @@
     "@aws-cdk/assert": "1.132.0",
     "@tsconfig/node14": "^1.0.1",
     "@types/aws-lambda": "^8.10.70",
-    "@types/node": "<15.0.0"
+    "@types/node": "<15.0.0",
+    "@types/uuid": "^8.3.3"
   },
   "dependencies": {
     "@aws-cdk/core": "1.132.0",
@@ -27,6 +28,7 @@
     "@serverless-stack/cli": "0.54.4",
     "@serverless-stack/resources": "0.54.4",
     "aws-sdk": "^2.1048.0",
-    "contentful": "^9.1.5"
+    "contentful": "^9.1.5",
+    "uuid": "^8.3.2"
   }
 }

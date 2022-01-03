@@ -2,7 +2,7 @@ type Like = {
     id: string
     userId: string
     itemId: string
-    createdAt: string;
+    createdAt?: string;
 };
   
 export default Like;
