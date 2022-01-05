@@ -1,4 +1,6 @@
 import getUserProfileById from "../functions/userProfile/getUserProfileById";
+// import updateUserProfile from "../functions/userProfile/updateUserProfile";
+// import UserProfile from "../types/UserProfile";
 
 type AppSyncEvent = {
   info: {
@@ -6,6 +8,7 @@ type AppSyncEvent = {
   };
   arguments: {
     userId: string;
+    // userProfile: UserProfile; 
   };
 };
 

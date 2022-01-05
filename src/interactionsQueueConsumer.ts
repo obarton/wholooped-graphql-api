@@ -2,7 +2,6 @@ import Like from "./types/Like";
 import {DynamoDBClient, GetItemCommand, PutItemCommand, TransactWriteItemsCommand} from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { v4 as uuidv4 } from 'uuid';
-import { getManagementClient } from "./contentful/managementClient";
 
 const client = new DynamoDBClient({ region: "us-west-2"});
 const LIKES_COUNT_TABLE = "dev-wholooped-graphql-appsync-LikesCount"
@@ -78,28 +77,9 @@ export async function main(event: any) {
             }
         ]
     }));
-
-    // const contentfulManagementClient = getManagementClient();
-    // const spaceId = process.env.CONTENTFUL_SPACE_ID || "";
-    // const envId = process.env.CONTENTFUL_ENV_ID || "";
-    // const entryId = likeData.itemId.split(':')[0]
-
-
-    // contentfulManagementClient.getSpace(spaceId)
-    // .then((space) => space.getEnvironment(envId))
-    // .then((environment) => environment.getEntry(entryId))
-    // .then((entry) => {
-    //     entry.fields.likeCount = transactionResponse.
-    //     return entry.update()
-    //   })
-    //   .then((entry) => console.log(`Entry ${entry.sys.id} updated.`))
-    //   .catch(console.error)
-
   }
 
-  const removeLike = async (data: any) => {
-    console.log(`removeLike data - ${JSON.stringify(data, null, 2)}`);
-    
+  const removeLike = async (data: any) => {    
     const transactionResponse = await client.send(new TransactWriteItemsCommand({
         TransactItems: [
             {

@@ -22,26 +22,6 @@ export default class MyStack extends sst.Stack {
       primaryIndex: { partitionKey: "itemId" },
     })
 
-    // Create Topic
-    const likedTopic = new sst.Topic(this, "Liked", {
-      subscribers: ["src/persistLike.main"],
-    });
-
-    // Create the HTTP API
-    const interactionsApi = new sst.Api(this, "InteractionsApi", {
-      defaultFunctionProps: {
-        // Pass in the topic arn to our API
-        environment: {
-          topicArn: likedTopic.snsTopic.topicArn,
-          LIKES_TABLE: likesTable.dynamodbTable.tableName,
-          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
-        },
-      },
-      routes: {
-        "POST /like": "src/like.main",
-      },
-    });
-
     // Create Queue
     const queue = new sst.Queue(this, "Queue", {
       consumer: "src/interactionsQueueConsumer.main",
@@ -62,6 +42,22 @@ export default class MyStack extends sst.Stack {
       },
     });
 
+    // Create the HTTP API
+    const userProfileManagementApi = new sst.Api(this, "UserProfileApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "PUT /userProfile/{id}": "src/functions/userProfile/management/update.main",
+        "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main"
+      },
+    });
+
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
       graphqlApi: {
@@ -70,7 +66,6 @@ export default class MyStack extends sst.Stack {
       defaultFunctionProps: {
         // Pass the table name to the function
         environment: {
-          topicArn: likedTopic.snsTopic.topicArn,
           queueUrl: queue.sqsQueue.queueUrl,
           LIKES_TABLE: likesTable.dynamodbTable.tableName,
           LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
@@ -102,16 +97,15 @@ export default class MyStack extends sst.Stack {
 
     // Enable the AppSync API to access the DynamoDB table
     api.attachPermissions([likesTable, likesCountTable]);
-    interactionsApi.attachPermissions([likesTable, likesCountTable, queue, likedTopic])
-    queueApi.attachPermissions([likesTable, likesCountTable, queue, likedTopic]);
+    queueApi.attachPermissions([likesTable, likesCountTable, queue]);
 
     // Show the AppSync API Id in the output
     this.addOutputs({
       LikesTable: likesTable.dynamodbTable.tableName,
       LikesCountTable: likesCountTable.dynamodbTable.tableName,
       ApiId: api.graphqlApi.apiId,
-      InteractionsApiEndpoint: interactionsApi.url,
       QueueApiEndpoint: queueApi.url,
+      UserProfileManagementApiEndpoint: userProfileManagementApi.url
     });
   }
 }
