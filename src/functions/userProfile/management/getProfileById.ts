@@ -1,5 +1,4 @@
 import contentful from 'contentful-management';
-import { convertContentfulFileUrlToImageUrl } from '../../../helper/image';
 import UserProfile from "../../../types/UserProfile"
 
 async function Connect() {
@@ -24,16 +23,16 @@ export async function main(event: any) {
         
         const profile : UserProfile = {
             id: entry.sys.id,
-            authId: fields.id['en-US'],
-            name: fields.name['en-US'],
+            authId: fields.id ? fields.id['en-US'] : "",
+            name: fields.name ? fields.name['en-US']: "",
             slug: fields.slug,
             photo: null,
             bio: fields.bio ? fields.bio['en-US'] : "",
-            attributes: fields.attributes['en-US'].map((attribute: any) => {
+            attributes: fields.attributes ? fields.attributes['en-US'].map((attribute: any) => {
                 return {
                     id: attribute.sys.id,
                 }
-            })
+            }): []
         }
         
         return profile;

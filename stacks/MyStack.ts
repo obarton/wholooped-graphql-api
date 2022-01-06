@@ -43,7 +43,7 @@ export default class MyStack extends sst.Stack {
     });
 
     // Create the HTTP API
-    const userProfileManagementApi = new sst.Api(this, "UserProfileApi", {
+    const userProfileManagementApi = new sst.Api(this, "UserProfileManagementApi", {
       defaultFunctionProps: {
         // Pass in the queue to our API
         environment: {
@@ -57,6 +57,21 @@ export default class MyStack extends sst.Stack {
         "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main"
       },
     });
+
+        // Create the HTTP API
+        const userProfileApi = new sst.Api(this, "UserProfileApi", {
+          defaultFunctionProps: {
+            // Pass in the queue to our API
+            environment: {
+              CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+              CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+              CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+            },
+          },
+          routes: {
+            "GET /userProfile/{id}": "src/functions/userProfile/getUserProfileData.main"
+          },
+        });
 
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
@@ -105,7 +120,8 @@ export default class MyStack extends sst.Stack {
       LikesCountTable: likesCountTable.dynamodbTable.tableName,
       ApiId: api.graphqlApi.apiId,
       QueueApiEndpoint: queueApi.url,
-      UserProfileManagementApiEndpoint: userProfileManagementApi.url
+      UserProfileManagementApiEndpoint: userProfileManagementApi.url,
+      UserProfileEndpoint: userProfileApi.url
     });
   }
 }
