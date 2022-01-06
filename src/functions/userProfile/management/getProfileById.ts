@@ -20,15 +20,16 @@ export async function main(event: any) {
         const userProfileId = event.pathParameters.id;
         const env = await Connect();
         const entry = await GetUserProfile(env, userProfileId)
+        const fields = (entry.fields as any);
         
         const profile : UserProfile = {
             id: entry.sys.id,
-            authId: (entry.fields as any).id['en-US'],
-            name: (entry.fields as any).name['en-US'],
-            slug: (entry.fields as any).slug,
+            authId: fields.id['en-US'],
+            name: fields.name['en-US'],
+            slug: fields.slug,
             photo: null,
-            bio: (entry.fields as any).bio['en-US'],
-            attributes: (entry.fields as any).attributes['en-US'].map((attribute: any) => {
+            bio: fields.bio ? fields.bio['en-US'] : "",
+            attributes: fields.attributes['en-US'].map((attribute: any) => {
                 return {
                     id: attribute.sys.id,
                 }

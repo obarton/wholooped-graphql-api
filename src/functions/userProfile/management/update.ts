@@ -16,7 +16,11 @@ async function UpdateUserProfile(env: any, userProfileId: string, userProfileDat
   // console.log(`${JSON.stringify(userProfileData, null, 2)}`)
 
   userProfile.fields.name['en-US'] = userProfileData.name;
-  userProfile.fields.bio['en-US'] = userProfileData.bio;
+  
+  userProfile.fields.bio = {
+      'en-US': userProfileData.bio
+  };
+
   userProfile.fields.attributes = { 
     'en-US': userProfileData.attributes?.map(attribute => {
       return {
