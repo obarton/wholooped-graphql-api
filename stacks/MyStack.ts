@@ -93,7 +93,8 @@ export default class MyStack extends sst.Stack {
         likes: "src/handlers/likes.handler",
         songs: "src/handlers/songs.handler",
         artists: "src/handlers/artists.handler",
-        userProfile: "src/handlers/userProfile.handler"
+        userProfile: "src/handlers/userProfile.handler",
+        genres: "src/handlers/genres.handler"
       },
       resolvers: {
         "Query    listLikes": "likes",
@@ -107,6 +108,7 @@ export default class MyStack extends sst.Stack {
         "Query    listArtists": "artists",
         "Query    listLoopPacks": "loopPacks",
         "Query    getUserProfileById": "userProfile",
+        "Query    listGenres": "genres",
       },
     });
 

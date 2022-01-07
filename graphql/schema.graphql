@@ -36,6 +36,13 @@ type Song @aws_api_key {
   isLiked: Boolean
 }
 
+type Genre {
+  id: ID
+  name: String!
+  slug: String!
+  coverImage: Image
+}
+
 type Platform @aws_api_key {
   id: ID
   name: String
@@ -123,6 +130,7 @@ type Query {
   listLoopPacks: [LoopPack] @aws_api_key
   getUserProfileById: UserProfile @aws_api_key
   querySongByArtist(artistSlug: String!, songSlug: String!): Song @aws_api_key
+  listGenres: [Genre]
 }
 
 type Mutation {
