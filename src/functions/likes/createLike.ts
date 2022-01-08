@@ -50,13 +50,5 @@ const transactionResponse = await client.send(new TransactWriteItemsCommand({
 	]
 }));
 
-  
-  // const params = {
-  //   Item: like as Record<string, unknown>,
-  //   TableName: process.env.LIKES_TABLE as string,
-  // };
-
-  // await dynamoDb.put(params).promise();
-
   return like;
 }

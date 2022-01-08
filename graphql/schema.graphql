@@ -121,6 +121,48 @@ input UpdateLikeInput @aws_api_key {
   itemId: String!
 }
 
+type Submission {
+  id: ID!
+  userId: ID!
+  artist: String!
+  songTitle: String!
+  albumTitle: String
+  linkToSong: String
+  loopmaker: String
+  loopTitle: String
+  loopPackTitle: String
+  linkToLoop: String
+  comments: String
+}
+
+input SubmissionInput {
+  id: ID!
+  userId: ID!
+  artist: String!
+  songTitle: String!
+  albumTitle: String
+  linkToSong: String
+  loopmaker: String
+  loopTitle: String
+  loopPackTitle: String
+  linkToLoop: String
+  comments: String
+}
+
+input UpdateSubmissionInput {
+  id: ID!
+  artist: String!
+  songTitle: String!
+  albumTitle: String
+  linkToSong: String
+  loopmaker: String
+  loopTitle: String
+  loopPackTitle: String
+  linkToLoop: String
+  Comments: String
+}
+
+
 type Query {
   listLikes(userId: String!): [Song] @aws_api_key
   getLikeById(userId: String!, itemId: String!): isLiked @aws_api_key
@@ -131,10 +173,15 @@ type Query {
   getUserProfileById: UserProfile @aws_api_key
   querySongByArtist(artistSlug: String!, songSlug: String!): Song @aws_api_key
   listGenres: [Genre]
+  listSubmissions(userId: String!): [Submission]
+  getSubmissionById(submissionId: String!): Submission
 }
 
 type Mutation {
   createLike(like: LikeInput!): Like @aws_api_key
   deleteLike(userId: String!, itemId: String!): String @aws_api_key
   updateLike(like: UpdateLikeInput!): Like @aws_api_key
+  createSubmission(submission: SubmissionInput!): Submission
+  deleteSubmission(submissionId: String!): String
+  updateSubmission(submission: UpdateSubmissionInput!): Submission
 }

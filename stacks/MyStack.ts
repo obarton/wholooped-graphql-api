@@ -22,6 +22,15 @@ export default class MyStack extends sst.Stack {
       primaryIndex: { partitionKey: "itemId" },
     })
 
+    // Create a submissions table
+    const submissionsTable = new sst.Table(this, "Submissions", {
+      fields: {
+        userId: sst.TableFieldType.STRING,
+        id: sst.TableFieldType.STRING,
+      },
+      primaryIndex: { partitionKey: "userId", sortKey: "submissionId" },
+    });
+
     // Create Queue
     const queue = new sst.Queue(this, "Queue", {
       consumer: "src/interactionsQueueConsumer.main",
@@ -58,20 +67,20 @@ export default class MyStack extends sst.Stack {
       },
     });
 
-        // Create the HTTP API
-        const userProfileApi = new sst.Api(this, "UserProfileApi", {
-          defaultFunctionProps: {
-            // Pass in the queue to our API
-            environment: {
-              CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
-              CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
-              CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
-            },
-          },
-          routes: {
-            "GET /userProfile/{id}": "src/functions/userProfile/getUserProfileData.main"
-          },
-        });
+    // Create the HTTP API
+    const userProfileApi = new sst.Api(this, "UserProfileApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /userProfile/{id}": "src/functions/userProfile/getUserProfileData.main"
+      },
+    });
 
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
@@ -84,6 +93,7 @@ export default class MyStack extends sst.Stack {
           queueUrl: queue.sqsQueue.queueUrl,
           LIKES_TABLE: likesTable.dynamodbTable.tableName,
           LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+          SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
           CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
           CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string
         },
@@ -94,7 +104,8 @@ export default class MyStack extends sst.Stack {
         songs: "src/handlers/songs.handler",
         artists: "src/handlers/artists.handler",
         userProfile: "src/handlers/userProfile.handler",
-        genres: "src/handlers/genres.handler"
+        genres: "src/handlers/genres.handler",
+        submissions: "src/handlers/submissions.handler"
       },
       resolvers: {
         "Query    listLikes": "likes",
@@ -109,17 +120,23 @@ export default class MyStack extends sst.Stack {
         "Query    listLoopPacks": "loopPacks",
         "Query    getUserProfileById": "userProfile",
         "Query    listGenres": "genres",
+        "Query    listSubmissions": "submissions",
+        "Query    getSubmissionById": "submissions",
+        "Mutation createSubmission": "submissions",
+        "Mutation updateSubmission": "submissions",
+        "Mutation deleteSubmission": "submissions",
       },
     });
 
     // Enable the AppSync API to access the DynamoDB table
-    api.attachPermissions([likesTable, likesCountTable]);
+    api.attachPermissions([likesTable, likesCountTable, submissionsTable]);
     queueApi.attachPermissions([likesTable, likesCountTable, queue]);
 
     // Show the AppSync API Id in the output
     this.addOutputs({
       LikesTable: likesTable.dynamodbTable.tableName,
       LikesCountTable: likesCountTable.dynamodbTable.tableName,
+      SubmissionsTable: submissionsTable.dynamodbTable.tableName,
       ApiId: api.graphqlApi.apiId,
       QueueApiEndpoint: queueApi.url,
       UserProfileManagementApiEndpoint: userProfileManagementApi.url,
