@@ -54,7 +54,7 @@ export default class MyStack extends sst.Stack {
       },
       routes: {
         "PUT /userProfile/{id}": "src/functions/userProfile/management/update.main",
-        "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main"
+        "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main",
       },
     });
 

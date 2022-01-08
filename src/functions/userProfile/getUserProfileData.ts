@@ -1,4 +1,5 @@
 import contentful from "contentful"
+import { convertContentfulFileUrlToImageUrl } from "../../helper/image"
 import UserProfile from "../../types/UserProfile"
 
 async function Connect() {
@@ -110,7 +111,11 @@ const mapUserProfileData = (userProfileResponse: any) => {
         authId: fields.id ? fields.id : "",
         name: fields.name ? fields.name: "",
         slug: fields.slug,
-        photo: null,
+        photo: {
+            id: fields.photo?.sys.id,
+            title: fields.photo?.fields.title,
+            url: convertContentfulFileUrlToImageUrl(fields.photo?.fields.file.url)
+        },
         bio: fields.bio ? fields.bio: "",
         attributes: fields.attributes ? fields.attributes.map((attribute: any) => {
             return {
@@ -131,8 +136,6 @@ export async function main(event: any) {
         const mappedContributionsData = await mapContributedByData(client, contributedByResponse)
         const userProfileResponse = await GetUserProfileData(client, userProfileId);
         const mappedUserProfileData = mapUserProfileData(userProfileResponse)
-
-        console.log(`userProfileResponse ${JSON.stringify(userProfileResponse, null, 2)}`);
 
         const responseObj = { 
             "profile": mappedUserProfileData,

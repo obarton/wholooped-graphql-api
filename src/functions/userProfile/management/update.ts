@@ -12,9 +12,6 @@ async function Connect() {
 
 async function UpdateUserProfile(env: any, userProfileId: string, userProfileData: UserProfile) {
   let userProfile = await env.getEntry(userProfileId)
-  // console.log(`${JSON.stringify(userProfile, null, 2)}`)
-  // console.log(`${JSON.stringify(userProfileData, null, 2)}`)
-
   userProfile.fields.name['en-US'] = userProfileData.name;
   
   userProfile.fields.bio = {
@@ -32,6 +29,16 @@ async function UpdateUserProfile(env: any, userProfileId: string, userProfileDat
       }
     })
   };
+
+  userProfile.fields.photo = {
+    'en-US': {
+      sys: {    
+        type: "Link",
+        linkType: "Asset",
+        id: userProfileData.photo?.id
+      }
+    }
+  }
 
   await userProfile.update();
   userProfile = await env.getEntry(userProfileId);
