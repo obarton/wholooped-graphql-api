@@ -1,5 +1,6 @@
 import contentful from 'contentful-management';
 import UserProfile from '../../../types/UserProfile';
+import urlSlug from "url-slug"
 
 async function Connect() {
   const client = await contentful.createClient({
@@ -12,10 +13,21 @@ async function Connect() {
 
 async function UpdateUserProfile(env: any, userProfileId: string, userProfileData: UserProfile) {
   let userProfile = await env.getEntry(userProfileId)
-  userProfile.fields.name['en-US'] = userProfileData.name;
+
+  userProfile.fields.name = { 
+    'en-US': userProfileData.name.toLowerCase()
+  };
   
   userProfile.fields.bio = {
       'en-US': userProfileData.bio
+  };
+
+  userProfile.fields.slug = {
+    'en-US': urlSlug(userProfileData.name.toLowerCase())
+};
+
+  userProfile.fields.displayName = { 
+    'en-US': userProfileData.name
   };
 
   userProfile.fields.attributes = { 

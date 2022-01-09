@@ -82,6 +82,21 @@ export default class MyStack extends sst.Stack {
       },
     });
 
+    // Create the HTTP API
+    const signUpApi = new sst.Api(this, "SignUpApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /userProfile/{username}": "src/functions/signUp/isUsernameValid.main"
+      },
+    });
+
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
       graphqlApi: {
@@ -103,7 +118,6 @@ export default class MyStack extends sst.Stack {
         likes: "src/handlers/likes.handler",
         songs: "src/handlers/songs.handler",
         artists: "src/handlers/artists.handler",
-        userProfile: "src/handlers/userProfile.handler",
         genres: "src/handlers/genres.handler",
         submissions: "src/handlers/submissions.handler"
       },
@@ -118,7 +132,6 @@ export default class MyStack extends sst.Stack {
         "Query    querySongByArtist": "songs",
         "Query    listArtists": "artists",
         "Query    listLoopPacks": "loopPacks",
-        "Query    getUserProfileById": "userProfile",
         "Query    listGenres": "genres",
         "Query    listSubmissions": "submissions",
         "Query    getSubmissionById": "submissions",
@@ -140,7 +153,8 @@ export default class MyStack extends sst.Stack {
       ApiId: api.graphqlApi.apiId,
       QueueApiEndpoint: queueApi.url,
       UserProfileManagementApiEndpoint: userProfileManagementApi.url,
-      UserProfileEndpoint: userProfileApi.url
+      UserProfileEndpoint: userProfileApi.url,
+      SignUpEndpoint: signUpApi.url
     });
   }
 }

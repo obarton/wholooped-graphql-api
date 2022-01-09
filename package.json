@@ -30,6 +30,7 @@
     "aws-sdk": "^2.1048.0",
     "contentful": "^9.1.5",
     "contentful-management": "^7.47.2",
+    "url-slug": "^3.0.2",
     "uuid": "^8.3.2"
   }
 }
