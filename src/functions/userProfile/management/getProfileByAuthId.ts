@@ -1,4 +1,5 @@
 import { getClient } from "../../../contentful/client"
+import { convertContentfulFileUrlToImageUrl } from "../../../helper/image";
 import UserProfile from "../../../types/UserProfile";
 
 export async function main(event: any) {
@@ -23,14 +24,19 @@ export async function main(event: any) {
 
         const profile : UserProfile = {
             id: entry.sys.id,
-            authId: fields.id ? fields.id['en-US'] : "",
-            name: fields.name ? fields.name['en-US']: "",
+            authId: fields.id ? fields.id : "",
+            name: fields.name ? fields.name: "",
             slug: fields.slug,
-            photo: null,
-            bio: fields.bio ? fields.bio['en-US'] : "",
-            attributes: fields.attributes ? fields.attributes['en-US'].map((attribute: any) => {
+            photo: {
+                id: fields.photo?.sys.id,
+                title: fields.photo?.fields.title,
+                url: convertContentfulFileUrlToImageUrl(fields.photo?.fields.file.url)
+            },
+            bio: fields.bio ? fields.bio: "",
+            attributes: fields.attributes ? fields.attributes.map((attribute: any) => {
                 return {
                     id: attribute.sys.id,
+                    name: attribute.fields.name
                 }
             }): []
         }
