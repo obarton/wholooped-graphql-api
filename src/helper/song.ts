@@ -5,7 +5,8 @@ import Producer from "../types/Producer";
 import Song from "../types/Song";
 import { convertContentfulFileUrlToImageUrl } from "./image";
 
-export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj: any): Song => {
+export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj: any): Song | null=> {
+    try {
     const { id } = contentfulSongResponseObj.sys;
     const {
         producer,
@@ -91,7 +92,12 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                 name: producer?.fields?.name
             }
         })
-    }  
-
-    return songObj;
+    } 
+    return songObj; 
+    }
+    
+    catch (error) {
+        console.log(`error when mapping contentfulSongResponse ${JSON.stringify(contentfulSongResponseObj, null, 2)} - ${JSON.stringify(error, null, 2)}`);                
+        return null;
+    }
 }

@@ -84,6 +84,21 @@ export default class MyStack extends sst.Stack {
     });
 
     // Create the HTTP API
+    const usersApi = new sst.Api(this, "UsersApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /users/{username}": "src/functions/users/getUserByUsername.main"
+      },
+    });
+
+    // Create the HTTP API
     const signUpApi = new sst.Api(this, "SignUpApi", {
       defaultFunctionProps: {
         // Pass in the queue to our API
@@ -171,7 +186,8 @@ export default class MyStack extends sst.Stack {
       UserProfileManagementApiEndpoint: userProfileManagementApi.url,
       UserProfileEndpoint: userProfileApi.url,
       SignUpEndpoint: signUpApi.url,
-      SearchEndpoint: searchApi.url
+      SearchEndpoint: searchApi.url,
+      UsersEndpoint: usersApi.url
     });
   }
 }

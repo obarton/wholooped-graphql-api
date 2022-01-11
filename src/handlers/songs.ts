@@ -17,7 +17,7 @@ type AppSyncEvent = {
 
 export async function handler(
   event: AppSyncEvent
-): Promise<Song[] | Song | string | null | undefined> {
+): Promise<Song[] | Song | (Song | null)[] | string | null | undefined> {
   switch (event.info.fieldName) {
     case "listSongs":
       return await listSongs();

@@ -25,6 +25,7 @@ export async function main(event: any) {
             id: entry.sys.id,
             authId: fields.id ? fields.id['en-US'] : "",
             name: fields.name ? fields.name['en-US']: "",
+            displayName: fields.displayName ? fields.displayName['en-US']: "",
             slug: fields.slug,
             photo: null,
             bio: fields.bio ? fields.bio['en-US'] : "",

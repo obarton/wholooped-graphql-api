@@ -22,9 +22,9 @@ export default async function getSongById(userId: string, songId: string): Promi
 
         // map to response object
         const songObj = mapContentfulSongResponseObjToSongObj(response);
-        songObj.loop = mapContentfulLoopResponseToLoopObj(loopResponse);
-        songObj.likesCount = likesCountResponse
-        songObj.isLiked = isLikedResponse?.isLiked;
+        (songObj as any).loop = mapContentfulLoopResponseToLoopObj(loopResponse);
+        (songObj as any).likesCount = likesCountResponse;
+        (songObj as any).isLiked = isLikedResponse?.isLiked;
         
         return songObj;
     } catch (error) {

@@ -43,7 +43,7 @@ export default async function listLikes(
 
   //console.log(`loopEntriesResponse ${JSON.stringify(loopEntriesResponse, null, 2)}`);
   const likedSongs = songEntriesResponse.items?.map(item => {
-    const s = mapContentfulSongResponseObjToSongObj(item);
+    const s = mapContentfulSongResponseObjToSongObj(item) as Song;
     const loopLookups = loopEntriesResponse.items.filter(loopResponse => s.loop.map(l => l.id).includes(loopResponse.sys.id))
     //console.log(`loopLookup ${JSON.stringify(loopLookup, null, 2)}`);
     s.loop = mapContentfulLoopResponseToLoopObj(loopLookups[0])

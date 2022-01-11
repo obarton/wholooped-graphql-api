@@ -14,11 +14,15 @@ export default async function querySongByArtist(artistSlug: string, songSlug: st
         
         console.log(`querySongEntriesResponse.items[0] ${JSON.stringify(querySongEntriesResponse.items[0], null , 2)}`);
         
-        const songResults = querySongEntriesResponse.items.map((songDataResponse: any): Song => {
+        const songResults = querySongEntriesResponse.items.map((songDataResponse: any): Song | null => {
             return mapContentfulSongResponseObjToSongObj(songDataResponse)
         })
         
-        return songResults.filter((song: Song) => song.artist[0].slug == artistSlug)[0] || null;
+        return songResults.filter((song: Song | null) => {
+            if (song) {
+                return song.artist[0].slug == artistSlug
+            }
+        })[0] || null;
     } catch (error) {
         console.error(error);    
 

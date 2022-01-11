@@ -4,19 +4,20 @@ import Loopmaker from "../../types/Loopmaker"
 import { getClient } from "../../contentful/client"
 import { convertContentfulFileUrlToImageUrl } from "../../helper/image";
 
-export default async function listLoopPacks(): Promise<LoopPack[] | null> {
+export default async function listLoopPacks(): Promise<(LoopPack | null)[] | null> {
 
     try {
         const client = getClient();
 
         const loopPackEntriesResponse = await client.getEntries({
             content_type: 'loopPack'
-          })   
+        })   
 
-        const listLoopPacksResponse = loopPackEntriesResponse.items?.map((loopPack: any): LoopPack => {
+        const listLoopPacksResponse = loopPackEntriesResponse.items?.map((loopPack: any): LoopPack | null=> {
+        try {
             const { id } = loopPack.sys;
             const { title, url, releaseDate, slug, loopmaker, artwork } = loopPack.fields;
-            const imageUrl = convertContentfulFileUrlToImageUrl(artwork.fields.file?.url)
+            const imageUrl = convertContentfulFileUrlToImageUrl(artwork.fields?.file?.url)
 
             return {
                 id,
@@ -36,7 +37,12 @@ export default async function listLoopPacks(): Promise<LoopPack[] | null> {
                     }
                 })
             }
-        })
+        } catch (error) {
+            console.log(`error when mapping loopPack ${JSON.stringify(loopPack, null, 2)} - ${JSON.stringify(error, null, 2)}`);                
+            return null;  
+        }
+        
+        }).filter(n => n);
         
         return listLoopPacksResponse;
     } catch (error) {
