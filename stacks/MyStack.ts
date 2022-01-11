@@ -98,6 +98,21 @@ export default class MyStack extends sst.Stack {
       },
     });
 
+    // Create the HTTP API
+    const searchApi = new sst.Api(this, "SearchApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string,  
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /search/{searchText}": "src/functions/search/search.main"
+      },
+    });
+
     // Create the AppSync GraphQL API
     const api = new sst.AppSyncApi(this, "AppSyncApi", {
       graphqlApi: {
@@ -155,7 +170,8 @@ export default class MyStack extends sst.Stack {
       QueueApiEndpoint: queueApi.url,
       UserProfileManagementApiEndpoint: userProfileManagementApi.url,
       UserProfileEndpoint: userProfileApi.url,
-      SignUpEndpoint: signUpApi.url
+      SignUpEndpoint: signUpApi.url,
+      SearchEndpoint: searchApi.url
     });
   }
 }
