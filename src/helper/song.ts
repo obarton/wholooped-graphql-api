@@ -9,6 +9,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
     try {
     const { id } = contentfulSongResponseObj.sys;
     const {
+        primaryContributor,
         producer,
         platformTrackId,
         platform, 
@@ -91,11 +92,23 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
                 id: producer?.sys.id,
                 name: producer?.fields?.name
             }
-        })
+        }),
+        primaryContributor: {
+            id: primaryContributor?.sys.id,
+            name: primaryContributor?.fields?.name,
+            displayName: primaryContributor?.fields?.displayName,
+            slug: primaryContributor?.fields?.slug,
+            photo: {
+                id: primaryContributor?.fields.photo.sys.id,
+                url: convertContentfulFileUrlToImageUrl(primaryContributor?.fields.photo.fields.file.url),
+                title: primaryContributor?.fields.photo.fields.title
+            }
+            
+        }
     } 
     return songObj; 
     }
-    
+
     catch (error) {
         console.log(`error when mapping contentfulSongResponse ${JSON.stringify(contentfulSongResponseObj, null, 2)} - ${JSON.stringify(error, null, 2)}`);                
         return null;

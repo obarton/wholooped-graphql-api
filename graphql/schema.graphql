@@ -34,6 +34,7 @@ type Song @aws_api_key {
   producer: [Producer]
   likesCount: Int
   isLiked: Boolean
+  primaryContributor: User
 }
 
 type Genre {
@@ -101,6 +102,14 @@ type UserProfile @aws_api_key {
   photo: Image
   bio: String
   attributes: [Attribute]
+}
+
+type User {
+  id: ID!
+  name: String!
+  displayName: String!
+  slug: String!
+  photo: Image
 }
 
 type Attribute @aws_api_key {

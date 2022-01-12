@@ -66,7 +66,7 @@ export async function main(event: any) {
 
       return {
         statusCode: 200,
-        body: JSON.stringify({ status: "successful" }),
+        body: JSON.stringify({ profile: userProfileData }),
       };
     }
     catch (error) {

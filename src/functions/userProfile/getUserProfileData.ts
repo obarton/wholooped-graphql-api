@@ -110,6 +110,7 @@ const mapUserProfileData = (userProfileResponse: any) => {
         id: entry.sys.id,
         authId: fields.id ? fields.id : "",
         name: fields.name ? fields.name: "",
+        displayName: fields.displayName ?? "",
         slug: fields.slug,
         photo: {
             id: fields.photo?.sys.id,
