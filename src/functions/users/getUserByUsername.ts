@@ -94,10 +94,6 @@ async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
 
     // add loop data to contribution data
     songObjData?.forEach((c: any) => {
-        console.log(`------------------------`);
-        //console.log(`loopData?.items ${loopData?.items}`);
-        
-        //loopData?.items
         c.loop =  loopData?.items?.filter((loopDataItem: any) => loopDataItem.sys.id == c.loop[0].id).map((item: any)=> {
             const { id } = item.sys;
             const { title, loopmaker, loopPack } = item.fields;

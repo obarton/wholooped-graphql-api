@@ -37,6 +37,19 @@ export default class MyStack extends sst.Stack {
     });
 
     // Create the HTTP API
+    const authApi = new sst.Api(this, "AuthApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          NODEBB_SESSION_SHARE_SECRET_KEY: process.env.NODEBB_SESSION_SHARE_SECRET_KEY as string, 
+        },
+      },
+      routes: {
+        "POST /sessiontoken": "src/functions/auth/getSessionToken.main"
+      },
+    });
+
+    // Create the HTTP API
     const queueApi = new sst.Api(this, "QueueApi", {
       defaultFunctionProps: {
         // Pass in the queue to our API
@@ -187,7 +200,8 @@ export default class MyStack extends sst.Stack {
       UserProfileEndpoint: userProfileApi.url,
       SignUpEndpoint: signUpApi.url,
       SearchEndpoint: searchApi.url,
-      UsersEndpoint: usersApi.url
+      UsersEndpoint: usersApi.url,
+      AuthEndpint: authApi.url
     });
   }
 }
