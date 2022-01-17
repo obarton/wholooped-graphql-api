@@ -3,14 +3,15 @@ import jwt from "jsonwebtoken"
 export async function main(event: any) {
     try {
         const data = JSON.parse(event.body)
-        const { sub, email, displayName, picture } = data;
+        const { sub, email, displayName, picture, bio } = data;
 
         const secretKey = process.env.NODEBB_SESSION_SHARE_SECRET_KEY as string;
         const payload = {
             id: sub,
             username: displayName,
             email,
-            picture
+            picture,
+            aboutme: bio
         };
 
         const jwtvalue = jwt.sign( payload, secretKey );
