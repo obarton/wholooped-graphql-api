@@ -7,7 +7,7 @@ type LoopPack = {
     url: string
     slug: string
     imageUrl: string | null
-    loopmaker?: Loopmaker[]
+    loopmaker: Loopmaker[]
 }
 
 export default LoopPack;

@@ -163,7 +163,8 @@ export default class MyStack extends sst.Stack {
         songs: "src/handlers/songs.handler",
         artists: "src/handlers/artists.handler",
         genres: "src/handlers/genres.handler",
-        submissions: "src/handlers/submissions.handler"
+        submissions: "src/handlers/submissions.handler",
+        content: "src/handlers/content.handler"
       },
       resolvers: {
         "Query    listLikes": "likes",
@@ -182,6 +183,7 @@ export default class MyStack extends sst.Stack {
         "Mutation createSubmission": "submissions",
         "Mutation updateSubmission": "submissions",
         "Mutation deleteSubmission": "submissions",
+        "Query    getContentLists": "content",
       },
     });
 

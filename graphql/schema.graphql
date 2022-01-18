@@ -170,6 +170,27 @@ input UpdateSubmissionInput {
   Comments: String
 }
 
+type Content {
+  id: String
+  title: String
+  subTitle: String
+  type: String
+  thumbnailUrl: String
+  userIcon: String
+  username: String
+  userDisplayName: String
+  userUrl: String
+  url: String
+}
+
+type ContentList {
+  id: ID
+  title: String
+  description: String
+  type: String
+  items: [Content]
+}
+
 
 type Query {
   listLikes(userId: String!): [Song] @aws_api_key
@@ -183,6 +204,7 @@ type Query {
   listGenres: [Genre]
   listSubmissions(userId: String!): [Submission]
   getSubmissionById(submissionId: String!): Submission
+  getContentLists: [ContentList]
 }
 
 type Mutation {

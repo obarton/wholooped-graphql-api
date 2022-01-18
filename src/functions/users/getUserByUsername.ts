@@ -123,9 +123,6 @@ async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
         });
     }) 
 
-    console.log(`*********** songObjData ${JSON.stringify(songObjData, null, 2)} ********`);
-    
-
     return songObjData;
 }
 

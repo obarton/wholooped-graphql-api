@@ -37,7 +37,8 @@ export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any):
             slug: loopPack.fields.slug,
             url: "",
             imageUrl: loopPack.fields.file?.url,
-            releaseDate: loopPack.fields.releaseDate
+            releaseDate: loopPack.fields.releaseDate,
+            loopmaker: loopmaker
         }
     }]
 }
