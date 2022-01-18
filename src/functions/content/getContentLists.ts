@@ -8,6 +8,11 @@ import { mapContentfulLoopPackResponseObjToLoopPackObj } from "../../helper/loop
 import LoopPack from "../../types/LoopPack";
 import ContentList from "../../types/ContentList";
 import { Content } from "../../types/Content";
+import Genre from "../../types/Genre";
+import { mapContentfulGenreResponseObjToGenreObj } from "../../helper/genre";
+import { type } from "os";
+import Loop from "../../types/Loop";
+import { mapContentfulLoopResponseToLoopObj } from "../../helper/loop";
 
 export default async function getContentLists(): Promise<ContentList[] | null> {
 
@@ -37,6 +42,20 @@ export default async function getContentLists(): Promise<ContentList[] | null> {
         const loopPackLists = loopPackEntriesResponse.items.map((loopPackResponse : any): LoopPack | null => {
             return mapContentfulLoopPackResponseObjToLoopPackObj(loopPackResponse)
         }).filter(n => n)
+
+        const genreEntriesResponse = await client.getEntries({
+            content_type: 'genre'
+        })   
+
+        const genreLists = genreEntriesResponse.items.map((genreResponse : any): Genre | null => {
+            return mapContentfulGenreResponseObjToGenreObj(genreResponse)
+        }).filter(n => n)
+
+        // const loopEntriesResponse = await client.getEntries({
+        //     content_type: 'loop'
+        // })   
+
+        // const loopLists = mapContentfulLoopResponseToLoopObj(loopEntriesResponse.items).filter(n => n)
 
         const songContent = songList.map((s: any) : Content => {
             const song = s as Song;
@@ -81,6 +100,31 @@ export default async function getContentLists(): Promise<ContentList[] | null> {
                 type: "looppack"
             }
         })
+
+        const genreContent = genreLists.map((g: any): Content => {
+            const genre = g as Genre;
+
+            return {
+                id: genre.id,
+                title: genre.name,
+                subTitle: "",
+                thumbnailUrl: genre.coverImage.url as string,
+                url: `/genres/${genre.slug}`,
+                type: "genre"
+            }
+        })
+
+        // const loopContent = loopLists.map((l: any): Content => {
+        //     const loop = l as Loop;
+
+        //     return {
+        //         id: loop.id,
+        //         title: loop.title,
+        //         subTitle: loop.loopmaker.map(l => l.name).join(", ");
+        //         thumbnailUrl: loop.loopPack?.imageUrl as string,
+        //         url: `/loops/`
+        //     }
+        // })
  
         return [
             {
@@ -103,6 +147,13 @@ export default async function getContentLists(): Promise<ContentList[] | null> {
                 description: "Popular artists on Who Looped",
                 type: "artist",
                 items: artistContent
+            },
+            {
+                id: "4",
+                title: "Genres",
+                description: "",
+                type: "genre",
+                items: genreContent
             }
         ]
     } catch (error) {
