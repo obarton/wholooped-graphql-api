@@ -1,5 +1,6 @@
 import contentful from "contentful"
 import { convertContentfulFileUrlToImageUrl } from "../../helper/image"
+import { mapContentfulSongResponseObjToSongObj } from "../../helper/song"
 import UserProfile from "../../types/UserProfile"
 
 async function Connect() {
@@ -46,39 +47,8 @@ async function GetSongsUsingLoopIds(client: any, loopIds: string[]) {
 }
 
 async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
-    const songObjData = songResponseData.items?.map((item: any) => {
-            const { id } = item.sys;
-            const { title, slug, loop, artist, album } = item.fields;
 
-            return { 
-                id,
-                title,
-                slug,
-                album: {
-                    title: album?.fields?.title,
-                    artwork: {
-                        url: convertContentfulFileUrlToImageUrl(album?.fields?.artwork.fields?.file.url)
-                    }
-                },
-                artist: artist.map((a: any) => {
-                    const { id } = a.sys;
-                    const { name, slug } = a.fields;
-
-                    return {
-                        id,
-                        name,
-                        slug
-                    }
-                }),
-                loop: loop.map((l: any) => {
-                    const { id } = l.sys;
-
-                    return {
-                        id
-                    }
-                })
-            }
-        })
+    const songObjData = songResponseData?.items?.map((songResponse: any) => mapContentfulSongResponseObjToSongObj(songResponse))
     
     const loopItems: any = [];
     songObjData?.forEach((songItem: any) => {
@@ -96,14 +66,14 @@ async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
     songObjData?.forEach((c: any) => {
         c.loop =  loopData?.items?.filter((loopDataItem: any) => loopDataItem.sys.id == c.loop[0].id).map((item: any)=> {
             const { id } = item.sys;
-            const { title, loopmaker, loopPack } = item.fields;
+            const { title, loopmaker, loopPack } = item?.fields;
 
             return {
                 id,
                 title,
                 loopmaker: loopmaker.map((l: any) => {
                     const { id } = l.sys;
-                    const { name, slug } = l.fields;
+                    const { name, slug } = l?.fields;
 
                     return {
                         id,
@@ -112,10 +82,10 @@ async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
                     }
                 }),
                 loopPack: {
-                    id: loopPack.sys.id,
-                    title: loopPack.fields.title,
+                    id: loopPack?.sys.id,
+                    title: loopPack?.fields?.title,
                     artwork: {
-                        url: convertContentfulFileUrlToImageUrl(loopPack.fields.artwork.fields.file.url)
+                        url: convertContentfulFileUrlToImageUrl(loopPack?.fields?.artwork?.fields?.file.url)
                     }
                 }
             }
