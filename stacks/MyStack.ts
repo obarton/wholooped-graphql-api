@@ -137,7 +137,8 @@ export default class MyStack extends sst.Stack {
         },
       },
       routes: {
-        "GET /search/{searchText}": "src/functions/search/search.main"
+        "GET /search/{searchText}": "src/functions/search/search.main",
+        "GET /search": "src/functions/search/searchAll.main"
       },
     });
 

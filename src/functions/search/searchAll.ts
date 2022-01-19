@@ -57,7 +57,7 @@ const mapLoopPackItem = (item: any) => {
         type: item.sys.contentType.sys.id,
         title: (item.fields as any)?.title,
         slug: `/looppacks/${(item.fields as any)?.loopmaker[0]?.fields.slug}/${(item.fields as any)?.slug}`,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.artwork?.fields?.file?.url)
+        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.artwork.fields?.file?.url)
     }
 }
 
@@ -71,11 +71,12 @@ const mapProducerItem = (item: any) => {
 
 export async function main(event: any) {
 
-    try {
-        const searchText = event.pathParameters.searchText
+    try {        
         const client = getClient();
-        const response = await client.getEntries({'query': searchText})
-
+        const response = await client.getEntries({
+                "sys.contentType.sys.id[in]": "artist,song,album,loopPack,loopmaker",
+                limit: 20})
+        
         const searchResponse = {
             totalCount: response.total,
             skip: response.skip,
