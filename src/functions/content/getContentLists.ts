@@ -94,7 +94,7 @@ export default async function getContentLists(): Promise<ContentList[] | null> {
             return {
                 id: loopPack.id,
                 title: loopPack.title,
-                subTitle: "",
+                subTitle: loopPack.loopmaker.map(l => l.name).join(", "),
                 thumbnailUrl: loopPack.imageUrl as string,
                 url: `/looppacks/${(loopPack.loopmaker[0].slug as string)}/${loopPack.slug}`,
                 type: "looppack"
