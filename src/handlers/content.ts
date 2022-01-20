@@ -1,4 +1,4 @@
-import getContentLists from "../functions/content/getContentLists";
+// import getContentLists from "../functions/content/getContentLists";
 import ContentList from "../types/ContentList";
 
 type AppSyncEvent = {
@@ -11,8 +11,8 @@ export async function handler(
   event: AppSyncEvent
 ): Promise<ContentList[] | null> {
   switch (event.info.fieldName) {
-    case "getContentLists":
-      return await getContentLists();
+    // case "getContentLists":
+    //   return await getContentLists();
     default:
       return null;
   }

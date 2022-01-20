@@ -50,6 +50,63 @@ export default class MyStack extends sst.Stack {
     });
 
     // Create the HTTP API
+    const submissionApi = new sst.Api(this, "SubmissionApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+          SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "POST /postsubmission": "src/functions/submissions/postSubmission.main"
+      },
+    });
+
+    // Create the HTTP API
+    const likesApi = new sst.Api(this, "LikesApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+          SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /likes/{userId}": "src/functions/likes/getLikes.main"
+      },
+    });
+
+    // Create the HTTP API
+    const songApi = new sst.Api(this, "SongApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          LIKES_TABLE: likesTable.dynamodbTable.tableName,
+          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+          SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
+          CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /song/{userId}/{id}": "src/functions/songs/getSong.main"
+      },
+    });
+
+    // Create the HTTP API
     const queueApi = new sst.Api(this, "QueueApi", {
       defaultFunctionProps: {
         // Pass in the queue to our API
@@ -142,69 +199,91 @@ export default class MyStack extends sst.Stack {
       },
     });
 
-    // Create the AppSync GraphQL API
-    const api = new sst.AppSyncApi(this, "AppSyncApi", {
-      graphqlApi: {
-        schema: "graphql/schema.graphql",
-      },
+    // Create the HTTP API
+    const contentApi = new sst.Api(this, "ContentApi", {
       defaultFunctionProps: {
-        // Pass the table name to the function
+        // Pass in the queue to our API
         environment: {
-          queueUrl: queue.sqsQueue.queueUrl,
-          LIKES_TABLE: likesTable.dynamodbTable.tableName,
-          LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
-          SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
-          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
-          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string,  
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
         },
       },
-      dataSources: {
-        loopPacks: "src/handlers/loopPacks.handler",
-        likes: "src/handlers/likes.handler",
-        songs: "src/handlers/songs.handler",
-        artists: "src/handlers/artists.handler",
-        genres: "src/handlers/genres.handler",
-        submissions: "src/handlers/submissions.handler",
-        content: "src/handlers/content.handler"
-      },
-      resolvers: {
-        "Query    listLikes": "likes",
-        "Query    getLikeById": "likes",
-        "Mutation createLike": "likes",
-        "Mutation updateLike": "likes",
-        "Mutation deleteLike": "likes",
-        "Query    listSongs": "songs",
-        "Query    getSongById": "songs",
-        "Query    querySongByArtist": "songs",
-        "Query    listArtists": "artists",
-        "Query    listLoopPacks": "loopPacks",
-        "Query    listGenres": "genres",
-        "Query    listSubmissions": "submissions",
-        "Query    getSubmissionById": "submissions",
-        "Mutation createSubmission": "submissions",
-        "Mutation updateSubmission": "submissions",
-        "Mutation deleteSubmission": "submissions",
-        "Query    getContentLists": "content",
+      routes: {
+        "GET /content": "src/functions/content/getContentLists.main"
       },
     });
 
+    // // Create the AppSync GraphQL API
+    // const api = new sst.AppSyncApi(this, "AppSyncApi", {
+    //   graphqlApi: {
+    //     schema: "graphql/schema.graphql",
+    //   },
+    //   defaultFunctionProps: {
+    //     // Pass the table name to the function
+    //     environment: {
+    //       queueUrl: queue.sqsQueue.queueUrl,
+    //       LIKES_TABLE: likesTable.dynamodbTable.tableName,
+    //       LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
+    //       SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
+    //       CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
+    //       CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string
+    //     },
+    //   },
+    //   dataSources: {
+    //     loopPacks: "src/handlers/loopPacks.handler",
+    //     likes: "src/handlers/likes.handler",
+    //     songs: "src/handlers/songs.handler",
+    //     artists: "src/handlers/artists.handler",
+    //     genres: "src/handlers/genres.handler",
+    //     submissions: "src/handlers/submissions.handler",
+    //     content: "src/handlers/content.handler"
+    //   },
+    //   resolvers: {
+    //     "Query    listLikes": "likes",
+    //     "Query    getLikeById": "likes",
+    //     "Mutation createLike": "likes",
+    //     "Mutation updateLike": "likes",
+    //     "Mutation deleteLike": "likes",
+    //     "Query    listSongs": "songs",
+    //     "Query    getSongById": "songs",
+    //     "Query    querySongByArtist": "songs",
+    //     "Query    listArtists": "artists",
+    //     "Query    listLoopPacks": "loopPacks",
+    //     "Query    listGenres": "genres",
+    //     "Query    listSubmissions": "submissions",
+    //     "Query    getSubmissionById": "submissions",
+    //     "Mutation createSubmission": "submissions",
+    //     "Mutation updateSubmission": "submissions",
+    //     "Mutation deleteSubmission": "submissions",
+    //     "Query    getContentLists": "content",
+    //   },
+    // });
+
     // Enable the AppSync API to access the DynamoDB table
-    api.attachPermissions([likesTable, likesCountTable, submissionsTable]);
+    // api.attachPermissions([likesTable, likesCountTable, submissionsTable]);
     queueApi.attachPermissions([likesTable, likesCountTable, queue]);
+    songApi.attachPermissions([likesTable, likesCountTable]);
+    submissionApi.attachPermissions([submissionsTable])
+    likesApi.attachPermissions([likesTable, likesCountTable])
 
     // Show the AppSync API Id in the output
     this.addOutputs({
       LikesTable: likesTable.dynamodbTable.tableName,
       LikesCountTable: likesCountTable.dynamodbTable.tableName,
       SubmissionsTable: submissionsTable.dynamodbTable.tableName,
-      ApiId: api.graphqlApi.apiId,
+      // ApiId: api.graphqlApi.apiId,
       QueueApiEndpoint: queueApi.url,
+      LikesEndpoint: likesApi.url,
       UserProfileManagementApiEndpoint: userProfileManagementApi.url,
       UserProfileEndpoint: userProfileApi.url,
       SignUpEndpoint: signUpApi.url,
       SearchEndpoint: searchApi.url,
       UsersEndpoint: usersApi.url,
-      AuthEndpint: authApi.url
+      AuthEndpint: authApi.url,
+      ContentEndpoint: contentApi.url,
+      SongEndpoint: songApi.url,
+      SubmissionsEndpoint: submissionApi.url
     });
   }
 }

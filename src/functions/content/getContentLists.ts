@@ -6,15 +6,11 @@ import Artist from "../../types/Artist";
 import { mapContentfulArtistResponseObjToArtistObj } from "../../helper/artist";
 import { mapContentfulLoopPackResponseObjToLoopPackObj } from "../../helper/loopPacks";
 import LoopPack from "../../types/LoopPack";
-import ContentList from "../../types/ContentList";
 import { Content } from "../../types/Content";
 import Genre from "../../types/Genre";
 import { mapContentfulGenreResponseObjToGenreObj } from "../../helper/genre";
-import { type } from "os";
-import Loop from "../../types/Loop";
-import { mapContentfulLoopResponseToLoopObj } from "../../helper/loop";
 
-export default async function getContentLists(): Promise<ContentList[] | null> {
+export async function main(event: any) {
 
     try {
         const client = getClient();
@@ -59,7 +55,6 @@ export default async function getContentLists(): Promise<ContentList[] | null> {
 
         const songContent = songList.map((s: any) : Content => {
             const song = s as Song;
-            console.log(`songContent song ${JSON.stringify(song, null, 2)}`);
             
             return {
                 id: song.id,
