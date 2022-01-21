@@ -27,7 +27,7 @@ export const mapContentfulSongResponseObjToSongObj = (contentfulSongResponseObj:
         id,
         title,
         url,
-        loopStartTimeSeconds: 0,
+        loopStartTimeSeconds,
         isActive,
         slug,
         isFeatured: false,
