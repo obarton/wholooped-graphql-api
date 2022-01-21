@@ -36,8 +36,8 @@ const mapUserItem = (item: any) => {
     return {
         id: item.sys.id,
         type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.name,
-        slug: `/users/${(item.fields as any)?.slug}`,
+        title: (item.fields as any)?.displayName,
+        slug: `/users/${(item.fields as any)?.name}`,
         thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.photo?.fields.file.url)
     }
 }
