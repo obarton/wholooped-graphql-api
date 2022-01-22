@@ -12,8 +12,6 @@ export default async function querySongByArtist(artistSlug: string, songSlug: st
             'fields.slug': songSlug
           })
         
-        console.log(`querySongEntriesResponse.items[0] ${JSON.stringify(querySongEntriesResponse.items[0], null , 2)}`);
-        
         const songResults = querySongEntriesResponse.items.map((songDataResponse: any): Song | null => {
             return mapContentfulSongResponseObjToSongObj(songDataResponse)
         })

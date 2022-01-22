@@ -74,7 +74,9 @@ export async function main(event: any) {
     try {
         const searchText = event.pathParameters.searchText
         const client = getClient();
-        const response = await client.getEntries({'query': searchText})
+        const response = await client.getEntries({'query': searchText,
+        'sys.contentType.sys.id[nin]': 'album'
+    })
 
         const searchResponse = {
             totalCount: response.total,
