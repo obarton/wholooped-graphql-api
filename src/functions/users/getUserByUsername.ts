@@ -117,7 +117,8 @@ const mapUserProfileData = (userProfileResponse: any) => {
                 id: attribute.sys.id,
                 name: attribute.fields.name
             }
-        }): []
+        }): [],
+        isVerified: fields.isVerified ? fields.isVerified : false
     }
 
     return profile;

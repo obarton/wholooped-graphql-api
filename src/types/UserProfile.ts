@@ -10,6 +10,7 @@ type UserProfile = {
   photo?: Image | null
   bio?: string
   attributes?: Attribute[]
+  isVerified? : boolean
 }
 
 export default UserProfile;
