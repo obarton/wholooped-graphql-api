@@ -83,7 +83,8 @@ export default class MyStack extends sst.Stack {
         },
       },
       routes: {
-        "GET /likes/{userId}": "src/functions/likes/getLikes.main"
+        "GET /likes/{userId}": "src/functions/likes/getLikes.main",
+        "GET /likes/songs/{itemId}": "src/functions/likes/getLikesCountBySongId.main"
       },
     });
 
