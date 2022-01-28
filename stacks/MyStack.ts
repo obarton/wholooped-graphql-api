@@ -136,6 +136,7 @@ export default class MyStack extends sst.Stack {
         "PUT /userProfile/{id}": "src/functions/userProfile/management/update.main",
         "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main",
         "GET /userProfile/auth/{id}": "src/functions/userProfile/management/getProfileByAuthId.main",
+        "PUT /loopmakerProfile/{id}": "src/functions/loopmakerProfile/management/updateLoopmakerProfile.main",
       },
     });
 
@@ -211,7 +212,8 @@ export default class MyStack extends sst.Stack {
         },
       },
       routes: {
-        "GET /content": "src/functions/content/getContentLists.main"
+        "GET /content": "src/functions/content/getContentLists.main",
+        "GET /content/{id}": "src/functions/content/getContentById.main"
       },
     });
 
