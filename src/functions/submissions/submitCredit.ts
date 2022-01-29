@@ -8,7 +8,7 @@ export async function main(event: any) {
         const { username, songUrl, loopUrl} = JSON.parse(event.body)
 
         const msg = {
-        to: ['obartondev@gmail.com', 'info@wholooped.com'],
+        to: ['obartondev@gmail.com', 'info@wholooped.com', 'dwoobusiness@gmail.com'],
         from: 'info@wholooped.com', // Use the email address or domain you verified above
         subject: `New credit submission from ${username}`,
         text: 'and easy to do anywhere, even with Node.js',
