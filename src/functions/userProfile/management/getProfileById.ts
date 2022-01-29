@@ -33,7 +33,8 @@ export async function main(event: any) {
                 return {
                     id: attribute.sys.id,
                 }
-            }): []
+            }): [],
+            isLoopmaker: fields.isLoopmaker ?? false
         }
         
         return profile;

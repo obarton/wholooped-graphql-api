@@ -1,5 +1,6 @@
 import Attribute from "./Attribute";
 import Image from "./Image";
+import Loopmaker from "./Loopmaker";
 
 type UserProfile = {
   id: string
@@ -11,6 +12,8 @@ type UserProfile = {
   bio?: string
   attributes?: Attribute[]
   isVerified? : boolean
+  isLoopmaker: boolean
+  linkedLoopmaker?: Loopmaker | null
 }
 
 export default UserProfile;

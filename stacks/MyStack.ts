@@ -64,7 +64,8 @@ export default class MyStack extends sst.Stack {
         },
       },
       routes: {
-        "POST /postsubmission": "src/functions/submissions/postSubmission.main"
+        "POST /postsubmission": "src/functions/submissions/postSubmission.main",
+        "POST /submitcredit": "src/functions/submissions/submitCredit.main"   
       },
     });
 
@@ -217,6 +218,21 @@ export default class MyStack extends sst.Stack {
       },
     });
 
+    // Create the HTTP API
+    const loopmakerApi = new sst.Api(this, "LoopmakerApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string,  
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /loopmaker/{id}/credits": "src/functions/loopmaker/getLoopmakerCredits.main",
+      },
+    });
+
     // // Create the AppSync GraphQL API
     // const api = new sst.AppSyncApi(this, "AppSyncApi", {
     //   graphqlApi: {
@@ -286,7 +302,8 @@ export default class MyStack extends sst.Stack {
       AuthEndpint: authApi.url,
       ContentEndpoint: contentApi.url,
       SongEndpoint: songApi.url,
-      SubmissionsEndpoint: submissionApi.url
+      SubmissionsEndpoint: submissionApi.url,
+      LoopmakerEndpoint: loopmakerApi.url
     });
   }
 }

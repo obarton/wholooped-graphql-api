@@ -1,5 +1,7 @@
 import { getClient } from "../../../contentful/client"
 import { convertContentfulFileUrlToImageUrl } from "../../../helper/image";
+import Loopmaker from "../../../types/Loopmaker";
+import LoopmakerProfile from "../../../types/LoopmakerProfile";
 import UserProfile from "../../../types/UserProfile";
 
 export async function main(event: any) {
@@ -7,8 +9,6 @@ export async function main(event: any) {
     try {
         const client = getClient();
         const authId = decodeURIComponent(event.pathParameters.id);
-
-        console.log(`authId ${authId}`);
         
         const usersEntriesResponse = await client.getEntries({
             content_type: 'user',
@@ -39,7 +39,29 @@ export async function main(event: any) {
                     id: attribute.sys.id,
                     name: attribute.fields.name
                 }
-            }): []
+            }): [],
+            isLoopmaker: fields.isLoopmaker ?? false,
+            linkedLoopmaker: fields.linkedLoopmaker ? ({
+                id: fields.linkedLoopmaker.sys.id,
+                name: fields.linkedLoopmaker.fields.name,
+                username: fields.linkedLoopmaker.fields.username,
+                websiteUrl: fields.linkedLoopmaker.fields.websiteUrl,
+                profilePhoto: {
+                    id: fields.linkedLoopmaker.fields.profilePhoto.sys.id,
+                    title: fields.linkedLoopmaker.fields.profilePhoto.fields.title,
+                    url: convertContentfulFileUrlToImageUrl(fields.linkedLoopmaker.fields.profilePhoto.fields.file.url),
+                },
+                headerPhoto: {
+                    id: fields.linkedLoopmaker.fields.headerPhoto.sys.id,
+                    title: fields.linkedLoopmaker.fields.headerPhoto.fields.title,
+                    url: convertContentfulFileUrlToImageUrl(fields.linkedLoopmaker.fields.headerPhoto.fields.file.url),
+                },
+                bio: fields.linkedLoopmaker.fields.bio,
+                twitterUrl: fields.linkedLoopmaker.fields.twitterUrl,
+                facebookUrl: fields.linkedLoopmaker.fields.facebookUrl,
+                instagramUrl: fields.linkedLoopmaker.fields.instagramUrl,
+            } as Loopmaker
+            ):  null
         }
         
         return profile;
