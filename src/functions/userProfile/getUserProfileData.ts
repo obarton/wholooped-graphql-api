@@ -124,7 +124,8 @@ const mapUserProfileData = (userProfileResponse: any) => {
                 name: attribute.fields.name
             }
         }): [],
-        isVerified: fields.isVerified ? fields.isVerified : false
+        isVerified: fields.isVerified ? fields.isVerified : false,
+        isLoopmaker: fields.isLoopmaer ?? false
     }
 
     return profile;

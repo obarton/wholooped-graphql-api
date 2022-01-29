@@ -60,7 +60,8 @@ export default class MyStack extends sst.Stack {
           CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
           CONTENTFUL_MANAGEMENT_ACCESS_TOKEN: process.env.CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string, 
           CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
-          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string,
+          SENDGRID_API_KEY: process.env.SENDGRID_API_KEY as string
         },
       },
       routes: {
@@ -229,6 +230,7 @@ export default class MyStack extends sst.Stack {
         },
       },
       routes: {
+        "GET /loopmakers/{username}": "src/functions/loopmaker/getLoopmakerByUsername.main",
         "GET /loopmaker/{id}/credits": "src/functions/loopmaker/getLoopmakerCredits.main",
       },
     });

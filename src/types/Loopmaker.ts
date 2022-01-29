@@ -3,7 +3,7 @@ import Image from "./Image";
 type Loopmaker = {
     id: string
     name: string
-    username: string
+    username?: string
     slug: string
     websiteUrl?: string
     profilePhoto?: Image | null

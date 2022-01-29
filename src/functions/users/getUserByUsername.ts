@@ -1,7 +1,7 @@
 import contentful from "contentful"
 import { convertContentfulFileUrlToImageUrl } from "../../helper/image"
 import { mapContentfulSongResponseObjToSongObj } from "../../helper/song"
-import UserProfile from "../../types/UserProfile"
+import { mapContentfulUserResponseObjToUserObj } from "../../helper/user"
 
 async function Connect() {
     return await contentful.createClient({
@@ -96,37 +96,13 @@ async function mapSongResponseDataSongObj(client: any, songResponseData: any) {
     return songObjData;
 }
 
-const mapUserProfileData = (userProfileResponse: any) => {
-    const entry = userProfileResponse;
-    const fields = entry.fields;
-
-    const profile : UserProfile = {
-        id: entry.sys.id,
-        authId: fields.id ? fields.id : "",
-        name: fields.name ? fields.name: "",
-        displayName: fields.displayName ?? "",
-        slug: fields.slug,
-        photo: {
-            id: fields.photo?.sys.id,
-            title: fields.photo?.fields.title,
-            url: convertContentfulFileUrlToImageUrl(fields.photo?.fields.file.url)
-        },
-        bio: fields.bio ? fields.bio: "",
-        attributes: fields.attributes ? fields.attributes.map((attribute: any) => {
-            return {
-                id: attribute.sys.id,
-                name: attribute.fields.name
-            }
-        }): [],
-        isVerified: fields.isVerified ? fields.isVerified : false
-    }
-
-    return profile;
+const mapUserProfileData = (userProfileResponse: any) => { 
+    return mapContentfulUserResponseObjToUserObj(userProfileResponse);
 }
 
 export async function main(event: any) {
     try {
-        let songsLinkedToUser: any[] = [];
+        //let songsLinkedToUser: any[] = [];
         let songsContributedByUser: any[] = [];
 
         const username = event.pathParameters.username;
@@ -134,25 +110,29 @@ export async function main(event: any) {
         const userProfileResponse = await GetUserProfileData(client, username);
         const userProfile = userProfileResponse.items[0];
         const mappedUserProfileData = mapUserProfileData(userProfile)
-        const contributedByResponse = await GetContributedByData(client, mappedUserProfileData.id)
-        const mappedContributionsData = await mapSongResponseDataSongObj(client, contributedByResponse)
-        songsContributedByUser = mappedContributionsData;
-
-        if (mappedUserProfileData.attributes?.map(a => a.name.toLocaleLowerCase()).includes("loopmaker")) {
-            const loopmakerProfileResponse = await GetLoopmakerReference(client, mappedUserProfileData.id)
-            const loopmakerId = loopmakerProfileResponse?.items[0].sys.id;
-            const getLoopsByLoopmakerResponse = await GetLoopsByLoopmaker(client, loopmakerId);
-            const loopIdsByLoopmaker = getLoopsByLoopmakerResponse?.items?.map((item: any) => item.sys.id)
-            const songsFromLoopIds = await GetSongsUsingLoopIds(client, loopIdsByLoopmaker)
-            const mappedLoopmakerSongsData = await mapSongResponseDataSongObj(client, songsFromLoopIds)
-            songsLinkedToUser = mappedLoopmakerSongsData;
+        
+        if(mappedUserProfileData) {
+            const contributedByResponse = await GetContributedByData(client, mappedUserProfileData.id)
+            const mappedContributionsData = await mapSongResponseDataSongObj(client, contributedByResponse)
+            songsContributedByUser = mappedContributionsData;
         }
+
+
+        // if (mappedUserProfileData.attributes?.map(a => a.name.toLocaleLowerCase()).includes("loopmaker")) {
+        //     const loopmakerProfileResponse = await GetLoopmakerReference(client, mappedUserProfileData.id)
+        //     const loopmakerId = loopmakerProfileResponse?.items[0].sys.id;
+        //     const getLoopsByLoopmakerResponse = await GetLoopsByLoopmaker(client, loopmakerId);
+        //     const loopIdsByLoopmaker = getLoopsByLoopmakerResponse?.items?.map((item: any) => item.sys.id)
+        //     const songsFromLoopIds = await GetSongsUsingLoopIds(client, loopIdsByLoopmaker)
+        //     const mappedLoopmakerSongsData = await mapSongResponseDataSongObj(client, songsFromLoopIds)
+        //     songsLinkedToUser = mappedLoopmakerSongsData;
+        // }
 
 
         const responseObj = { 
             "profile": mappedUserProfileData,
             "contributions": songsContributedByUser,
-            "songs": songsLinkedToUser
+            "songs": []
         }
         
         return responseObj
