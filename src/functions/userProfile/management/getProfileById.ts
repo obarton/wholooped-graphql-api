@@ -1,5 +1,5 @@
 import contentful from 'contentful-management';
-import UserProfile from "../../../types/UserProfile"
+import { mapContentfulUserResponseObjToUserObj } from '../../../helper/user';
 
 async function Connect() {
     const client = await contentful.createClient({
@@ -19,23 +19,8 @@ export async function main(event: any) {
         const userProfileId = event.pathParameters.id;
         const env = await Connect();
         const entry = await GetUserProfile(env, userProfileId)
-        const fields = (entry.fields as any);
-        
-        const profile : UserProfile = {
-            id: entry.sys.id,
-            authId: fields.id ? fields.id['en-US'] : "",
-            name: fields.name ? fields.name['en-US']: "",
-            displayName: fields.displayName ? fields.displayName['en-US']: "",
-            slug: fields.slug,
-            photo: null,
-            bio: fields.bio ? fields.bio['en-US'] : "",
-            attributes: fields.attributes ? fields.attributes['en-US'].map((attribute: any) => {
-                return {
-                    id: attribute.sys.id,
-                }
-            }): [],
-            isLoopmaker: fields.isLoopmaker ?? false
-        }
+
+        const profile = mapContentfulUserResponseObjToUserObj(entry)
         
         return profile;
     } catch (error) {

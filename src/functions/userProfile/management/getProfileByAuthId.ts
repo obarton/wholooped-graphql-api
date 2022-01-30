@@ -1,7 +1,5 @@
 import { getClient } from "../../../contentful/client"
-import { convertContentfulFileUrlToImageUrl } from "../../../helper/image";
-import { mapContentfulLoopmakerResponseObjToLoopmakerObj } from "../../../helper/loopmaker";
-import UserProfile from "../../../types/UserProfile";
+import { mapContentfulUserResponseObjToUserObj } from "../../../helper/user";
 
 export async function main(event: any) {
 
@@ -19,29 +17,7 @@ export async function main(event: any) {
         }
 
         const entry = usersEntriesResponse.items[0];
-        const fields = (entry.fields as any);
-
-        const profile : UserProfile = {
-            id: entry.sys.id,
-            authId: fields.id ? fields.id : "",
-            name: fields.name ? fields.name: "",
-            displayName: fields.displayName ?? "",
-            slug: fields.slug,
-            photo: {
-                id: fields.photo?.sys.id,
-                title: fields.photo?.fields.title,
-                url: convertContentfulFileUrlToImageUrl(fields.photo?.fields.file.url)
-            },
-            bio: fields.bio ? fields.bio: "",
-            attributes: fields.attributes ? fields.attributes.map((attribute: any) => {
-                return {
-                    id: attribute.sys.id,
-                    name: attribute.fields.name
-                }
-            }): [],
-            isLoopmaker: fields.isLoopmaker ?? false,
-            linkedLoopmaker: fields.linkedLoopmaker ? (mapContentfulLoopmakerResponseObjToLoopmakerObj(fields.linkedLoopmaker)):  null
-        }
+        const profile = mapContentfulUserResponseObjToUserObj(entry)
         
         return profile;
     } catch (error) {

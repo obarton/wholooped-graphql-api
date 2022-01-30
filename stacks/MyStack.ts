@@ -139,6 +139,7 @@ export default class MyStack extends sst.Stack {
         "GET /userProfile/{id}": "src/functions/userProfile/management/getProfileById.main",
         "GET /userProfile/auth/{id}": "src/functions/userProfile/management/getProfileByAuthId.main",
         "PUT /loopmakerProfile/{id}": "src/functions/loopmakerProfile/management/updateLoopmakerProfile.main",
+        "POST /loopmakerProfile": "src/functions/loopmakerProfile/management/createLoopmakerProfile.main",
       },
     });
 
