@@ -39,7 +39,7 @@ async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loop
   };
 
   if(loopmakerProfileData.profilePhoto) {
-    loopmakerProfile.fields.photo = {
+    loopmakerProfile.fields.profilePhoto = {
         'en-US': {
           sys: {    
             type: "Link",
