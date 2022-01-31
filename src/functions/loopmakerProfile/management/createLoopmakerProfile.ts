@@ -90,7 +90,7 @@ async function CreateLoopmakerProfile(env: any, loopmakerProfileData: LoopmakerP
           sys: {    
             type: "Link",
             linkType: "Asset",
-            id: "1rJhbOLoCnIasT3e32TEJW" //default header image id
+            id: "117tE4i8K824fu2af7Tftg" //default header image id
           }
         }
       }
