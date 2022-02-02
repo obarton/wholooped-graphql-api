@@ -135,7 +135,8 @@ export async function main(event: any): Promise<ContentList[]> {
                 title: "Trending Loop Packs",
                 description: "Popular loop packs on Who Looped",
                 type: "looppack",
-                items: loopPackContent
+                items: loopPackContent,
+                showMoreLink: "/looppacks"
             },
             {
                 id: "3",
