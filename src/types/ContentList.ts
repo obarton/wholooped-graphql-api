@@ -6,6 +6,7 @@ type ContentList = {
     description: string
     type: string
     items: Content[]
+    showMoreLink?: string
 }
 
 export default ContentList;

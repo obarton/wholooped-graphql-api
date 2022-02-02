@@ -284,6 +284,7 @@ export default class MyStack extends sst.Stack {
 
     // Enable the AppSync API to access the DynamoDB table
     // api.attachPermissions([likesTable, likesCountTable, submissionsTable]);
+    queue.attachPermissions([likesTable, likesCountTable, queue]);
     queueApi.attachPermissions([likesTable, likesCountTable, queue]);
     songApi.attachPermissions([likesTable, likesCountTable]);
     submissionApi.attachPermissions([submissionsTable])

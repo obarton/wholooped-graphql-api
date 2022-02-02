@@ -9,7 +9,7 @@ const client = new DynamoDBClient({ region: "us-west-2"});
 export async function main(event: any) {
     for (let i = 0; i < event.Records.length; i++) {
         const record = event.Records[i];
-        const { interactionType, data, likesTable, likesCountTable } = JSON.parse(record.body)
+        const { interactionType, data, likesTable, likesCountTable } = JSON.parse(record.body)   
 
         if (data) {
             switch (interactionType) {
@@ -36,6 +36,10 @@ export async function main(event: any) {
         itemId: data?.itemId,
         id: uuidv4()
     }
+
+    console.log(`addLike data ${JSON.stringify(data, null, 2)}`)
+    console.log(`addLike likesTable ${JSON.stringify(likesTable, null, 2)}`)
+    console.log(`addLike likesCountTable ${JSON.stringify(likesCountTable, null, 2)}`)
 
     const currentDateTime = new Date(Date.now()).toISOString()
     likeData.createdAt = currentDateTime; // Current Unix timestamp  
@@ -79,6 +83,10 @@ export async function main(event: any) {
   }
 
   const removeLike = async (data: any, likesTable: string, likesCountTable: string) => {    
+    console.log(`removeLike data ${JSON.stringify(data, null, 2)}`)
+    console.log(`removeLike likesTable ${JSON.stringify(likesTable, null, 2)}`)
+    console.log(`removeLike likesCountTable ${JSON.stringify(likesCountTable, null, 2)}`)
+
     const transactionResponse = await client.send(new TransactWriteItemsCommand({
         TransactItems: [
             {

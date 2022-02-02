@@ -9,8 +9,9 @@ import LoopPack from "../../types/LoopPack";
 import { Content } from "../../types/Content";
 import Genre from "../../types/Genre";
 import { mapContentfulGenreResponseObjToGenreObj } from "../../helper/genre";
+import ContentList from "../../types/ContentList";
 
-export async function main(event: any) {
+export async function main(event: any): Promise<ContentList[]> {
 
     try {
         const client = getClient();
@@ -141,7 +142,8 @@ export async function main(event: any) {
                 title: "Trending Artists",
                 description: "Popular artists on Who Looped",
                 type: "artist",
-                items: artistContent
+                items: artistContent,
+                showMoreLink: "/artists"
             },
             {
                 id: "4",
