@@ -10,6 +10,8 @@ export async function main(event: any) {
 
     if (messageBody.interactionType && messageBody.data) { 
         console.log(`Queueing ${messageBody.interactionType} message...`);
+        console.log(`LIKES_TABLE ${process.env.LIKES_TABLE as string} message...`);
+        console.log(`LIKES_COUNT_TABLE ${process.env.LIKES_COUNT_TABLE as string} message...`);
        
         await sqs
         .sendMessage({
@@ -17,7 +19,9 @@ export async function main(event: any) {
             QueueUrl: process.env.queueUrl || "",
             MessageBody: JSON.stringify({ 
                 interactionType: messageBody.interactionType,
-                data: messageBody.data
+                data: messageBody.data,
+                likesTable: process.env.LIKES_TABLE as string,
+                likesCountTable: process.env.LIKES_COUNT_TABLE as string
             }),
         })
         .promise();
