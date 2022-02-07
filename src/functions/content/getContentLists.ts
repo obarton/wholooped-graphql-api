@@ -11,7 +11,7 @@ import Genre from "../../types/Genre";
 import { mapContentfulGenreResponseObjToGenreObj } from "../../helper/genre";
 import ContentList from "../../types/ContentList";
 
-export async function main(event: any): Promise<ContentList[]> {
+export async function main(event: any): Promise<ContentList[] | null> {
 
     try {
         const client = getClient();
