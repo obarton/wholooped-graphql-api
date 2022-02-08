@@ -12,6 +12,7 @@ type Loopmaker = {
     twitterUrl?: string
     facebookUrl?: string
     instagramUrl?: string
+    isFeatured?: boolean
 }
 
 export default Loopmaker;

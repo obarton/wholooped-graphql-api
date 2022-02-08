@@ -10,6 +10,8 @@ import { Content } from "../../types/Content";
 import Genre from "../../types/Genre";
 import { mapContentfulGenreResponseObjToGenreObj } from "../../helper/genre";
 import ContentList from "../../types/ContentList";
+import Loopmaker from "../../types/Loopmaker";
+import { mapContentfulLoopmakerResponseObjToLoopmakerObj } from "../../helper/loopmaker";
 
 export async function main(event: any): Promise<ContentList[] | null> {
 
@@ -17,7 +19,8 @@ export async function main(event: any): Promise<ContentList[] | null> {
         const client = getClient();
 
         const songEntriesResponse = await client.getEntries({
-            content_type: 'song'
+            content_type: 'song',
+            limit: 15
           })
           
         const songList = songEntriesResponse.items.map((song: any): Song | null => {
@@ -25,7 +28,8 @@ export async function main(event: any): Promise<ContentList[] | null> {
         }).filter(n => n)
 
         const artistEntriesResponse = await client.getEntries({
-            content_type: 'artist'
+            content_type: 'artist',
+            limit: 15
           })
 
         const artistLists = artistEntriesResponse.items.map((artistResponse : any): Artist | null => {
@@ -33,15 +37,26 @@ export async function main(event: any): Promise<ContentList[] | null> {
         }).filter(n => n)
 
         const loopPackEntriesResponse = await client.getEntries({
-            content_type: 'loopPack'
+            content_type: 'loopPack',
+            limit: 15
         })   
 
         const loopPackLists = loopPackEntriesResponse.items.map((loopPackResponse : any): LoopPack | null => {
             return mapContentfulLoopPackResponseObjToLoopPackObj(loopPackResponse)
         }).filter(n => n)
 
+        const loopMakerEntriesResponse = await client.getEntries({
+            content_type: 'loopmaker',
+            limit: 15
+        })   
+
+        const loopmakerLists = loopMakerEntriesResponse.items.map((loopmakerResponse : any): Loopmaker | null => {
+            return mapContentfulLoopmakerResponseObjToLoopmakerObj(loopmakerResponse)
+        }).filter(n => n)
+
         const genreEntriesResponse = await client.getEntries({
-            content_type: 'genre'
+            content_type: 'genre',
+            limit: 15
         })   
 
         const genreLists = genreEntriesResponse.items.map((genreResponse : any): Genre | null => {
@@ -97,6 +112,24 @@ export async function main(event: any): Promise<ContentList[] | null> {
             }
         })
 
+        const loopmakerFilter = (loopmaker: any) => {
+            return loopmaker.profilePhoto?.url !== null && loopmaker.id !== "2a356d22-645b-4eee-babf-edf4d6797d09" && loopmaker?.isFeatured == true
+        }
+
+        // filter out sample data and loopmakers without profile pics
+        const loopmakerContent = loopmakerLists.filter((l: any) => loopmakerFilter(l)).map((l: any) : Content => {
+            const loopmaker = l as Loopmaker;
+
+            return {
+                id: loopmaker.id,
+                title: loopmaker.name,
+                subTitle: "",
+                thumbnailUrl: loopmaker.profilePhoto?.url as string,
+                url: `/loopmakers/${loopmaker.slug}`,
+                type: "loopmaker"
+            }
+        })
+
         const genreContent = genreLists.map((g: any): Content => {
             const genre = g as Genre;
 
@@ -148,6 +181,13 @@ export async function main(event: any): Promise<ContentList[] | null> {
             },
             {
                 id: "4",
+                title: "Featured Loop Makers",
+                description: "Featured Loop Makers on Who Looped",
+                type: "loopmaker",
+                items: loopmakerContent
+            },
+            {
+                id: "5",
                 title: "Genres",
                 description: "",
                 type: "genre",

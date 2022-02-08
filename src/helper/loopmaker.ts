@@ -14,7 +14,8 @@ export const mapContentfulLoopmakerResponseObjToLoopmakerObj = (contentfulLoopma
             bio,
             twitterUrl,
             facebookUrl,
-            instagramUrl
+            instagramUrl,
+            isFeatured
          } = contentfulLoopmakerResponseObj.fields;
 
         return {
@@ -36,7 +37,8 @@ export const mapContentfulLoopmakerResponseObjToLoopmakerObj = (contentfulLoopma
             bio,
             twitterUrl,
             facebookUrl,
-            instagramUrl
+            instagramUrl,
+            isFeatured
         }   
     } 
     catch (error) {

@@ -1,73 +1,12 @@
 import { getClient } from "../../contentful/client"
-import { convertContentfulFileUrlToImageUrl } from "../../helper/image";
-
-const mapArtistItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.name,
-        slug: `/artists/${(item.fields as any)?.slug}`,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.photo?.fields?.file?.url)
-    }
-}
-
-const mapSongItem = (item: any) => {
-    console.log(`(item.fields as any)?.artist[0]?.fields.slug ${(item.fields as any)?.artist[0]?.fields.slug}`);  
-
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.title,
-        slug: `/artists/${(item.fields as any)?.artist[0]?.fields.slug}/${(item.fields as any)?.slug}`,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.album?.fields.artwork.fields.file.url),
-    }
-}
-
-const mapAlbumItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.title,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl(item?.fields.artwork.fields.file.url),
-    }
-}
-
-const mapUserItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.name,
-        slug: `/users/${(item.fields as any)?.slug}`,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.photo?.fields.file.url)
-    }
-}
-
-const mapLoopmakerItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.name,
-        // slug: "/", //`/loopmakers/${(item.fields as any)?.slug}`
-    }
-}
-
-const mapLoopPackItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.title,
-        slug: `/looppacks/${(item.fields as any)?.loopmaker[0]?.fields.slug}/${(item.fields as any)?.slug}`,
-        thumbnailUrl: convertContentfulFileUrlToImageUrl((item.fields as any)?.artwork.fields?.file?.url)
-    }
-}
-
-const mapProducerItem = (item: any) => {
-    return {
-        id: item.sys.id,
-        type: item.sys.contentType.sys.id,
-        title: (item.fields as any)?.name,
-    }
-}
+import { mapArtistItem, 
+    mapSongItem, 
+    mapAlbumItem, 
+    mapUserItem, 
+    mapLoopmakerItem, 
+    mapLoopPackItem,
+    mapProducerItem
+} from "../../helper/search";
 
 export async function main(event: any) {
 
