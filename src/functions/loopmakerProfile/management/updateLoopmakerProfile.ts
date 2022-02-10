@@ -1,5 +1,6 @@
 import contentful from 'contentful-management';
 import LoopmakerProfile from '../../../types/LoopmakerProfile';
+import urlSlug from "url-slug"
 
 async function Connect() {
   const client = await contentful.createClient({
@@ -11,7 +12,7 @@ async function Connect() {
 }
 
 async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loopmakerProfileData: LoopmakerProfile) {
-    // console.log(`loopmakerProfileData ${JSON.stringify(loopmakerProfileData, null, 2)}`)
+  //console.log(`loopmakerProfileData ${JSON.stringify(loopmakerProfileData, null, 2)}`)
   let loopmakerProfile = await env.getEntry(loopmakerProfileId)
 
   loopmakerProfile.fields.name = { 
@@ -21,13 +22,17 @@ async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loop
   loopmakerProfile.fields.username = { 
     'en-US': loopmakerProfileData.username.toLowerCase()
   };
+
+  loopmakerProfile.fields.slug = { 
+    'en-US': urlSlug(loopmakerProfileData.username.toLowerCase()) 
+  };
   
   loopmakerProfile.fields.bio = {
       'en-US': loopmakerProfileData.bio
   };
 
   loopmakerProfile.fields.websiteUrl = {
-    'en-US': loopmakerProfileData.websiteUrl
+    'en-US': loopmakerProfileData.websiteUrl?.toLowerCase()
     };
 
   loopmakerProfile.fields.twitterUrl = { 
@@ -72,6 +77,10 @@ export async function main(event: any) {
     {
       const loopmakerProfileData = JSON.parse(event.body)
       const env = await Connect();
+      if(loopmakerProfileData) {
+        loopmakerProfileData.slug = urlSlug(loopmakerProfileData.username.toLowerCase())
+      }
+
       await UpdateLoopmakerProfile(env, event.pathParameters.id, loopmakerProfileData);
 
       return {

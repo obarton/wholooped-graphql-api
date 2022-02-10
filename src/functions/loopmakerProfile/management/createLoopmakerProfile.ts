@@ -21,7 +21,7 @@ async function CreateLoopmakerProfile(env: any, loopmakerProfileData: LoopmakerP
   };
 
   const slug = { 
-    'en-US': urlSlug(loopmakerProfileData.name.toLowerCase()) 
+    'en-US': urlSlug(loopmakerProfileData.username.toLowerCase()) 
   };
 
   const username = { 

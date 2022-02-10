@@ -56,6 +56,7 @@ export async function main(event: any): Promise<ContentList[] | null> {
 
         const genreEntriesResponse = await client.getEntries({
             content_type: 'genre',
+            //order: 'sys.fields.name',
             limit: 15
         })   
 
