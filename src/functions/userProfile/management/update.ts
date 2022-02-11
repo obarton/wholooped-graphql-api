@@ -15,7 +15,7 @@ async function UpdateUserProfile(env: any, userProfileId: string, userProfileDat
   let userProfile = await env.getEntry(userProfileId)
 
   userProfile.fields.name = { 
-    'en-US': userProfileData.name.toLowerCase()
+    'en-US': userProfileData.name
   };
   
   userProfile.fields.bio = {
@@ -27,7 +27,7 @@ async function UpdateUserProfile(env: any, userProfileId: string, userProfileDat
 };
 
   userProfile.fields.displayName = { 
-    'en-US': userProfileData.name
+    'en-US': userProfileData.displayName
   };
 
   userProfile.fields.attributes = { 
@@ -62,6 +62,10 @@ export async function main(event: any) {
     {
       const userProfileData = JSON.parse(event.body)
       const env = await Connect();
+      if(userProfileData) {
+        userProfileData.slug = urlSlug(userProfileData.name.toLowerCase());
+      }
+      
       await UpdateUserProfile(env, event.pathParameters.id, userProfileData);
 
       return {
