@@ -196,6 +196,31 @@ export async function  getLoopContentItems(): Promise<Content[]> {
     })
 }
 
+export async function  getDynamicLoopContentContentItems(): Promise<Content[]> {
+    const loopEntriesResponse = await client.getEntries({
+        content_type: 'loop',
+        'metadata.tags.sys.id[all]': "vintage",
+        limit: 15
+    })   
+
+    const loopLists = loopEntriesResponse.items.map((loopResponse : any): Loop | null => {
+        return mapContentfulLoopResponseToLoopObj(loopResponse)
+    }).filter(n => n)
+
+    return loopLists.map((l: any): Content => {
+        const loop = l as Loop;
+
+        return {
+            id: loop.id,
+            title: loop.title,
+            subTitle: loop.loopmaker.map((l: any) => l.name).join(", "),
+            thumbnailUrl: loop.loopPack?.imageUrl as string,
+            url: `/loopmakers/${loop.loopmaker[0].slug}/${loop.slug}`,
+            type: "loop"
+        }
+    })
+}
+
 export async function getDefaultContentLists(): Promise<ContentList[]> {
     const songContentItems = await getSongContentItems();
     const artistContentItems = await getArtistContentItems();
@@ -203,6 +228,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopmakerContentItems = await getLoopmakerContentItems();
     const genreContentItems = await getGenreContentItems();
     const loopContentItems = await getLoopContentItems();
+    const dynamicContentItems = await getDynamicLoopContentContentItems();
 
     const songContentList = {
         id: "1",
@@ -223,10 +249,10 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
 
     const loopContentList = {
         id: "3",
-        title: "Guitar Loops",
-        description: "Explore guitar loops",
+        title: "Vintage Sounds",
+        description: "Loops with warmth and textures reminiscent of classic analog hardware.",
         type: "loop",
-        items: loopContentItems,
+        items: dynamicContentItems
         //showMoreLink: "/looppacks"
     }
 
@@ -250,7 +276,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const genreContentList = {
         id: "6",
         title: "Genres",
-        description: "",
+        description: "Explore loops by genre",
         type: "genre",
         items: genreContentItems
     }
@@ -258,8 +284,8 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
 
     return [
         songContentList,
+        loopContentList,
         loopPackContentList,
-        //loopContentList,
         artistContentList,
         loopmakerContentList,
         genreContentList
