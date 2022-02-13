@@ -2,7 +2,7 @@
 import Song from "../../types/Song"
 import { getClient } from "../../contentful/client"
 import { mapContentfulSongResponseObjToSongObj } from "../../helper/song";
-import { mapContentfulLoopResponseToLoopObj } from "../../helper/loop";
+import { mapContentfulLoopsResponseToLoopObj } from "../../helper/loop";
 import getLikesCountById from "../likes/getLikesCountById";
 
 export default async function querySongByArtist(artistSlug: string, songSlug: string): Promise<Song | null> {
@@ -32,7 +32,7 @@ export default async function querySongByArtist(artistSlug: string, songSlug: st
         
         if (loopId) {
             const loopResponse = await client.getEntry(loopId);
-            song.loop = mapContentfulLoopResponseToLoopObj(loopResponse);
+            song.loop = mapContentfulLoopsResponseToLoopObj(loopResponse);
         }
 
         const itemId = `${song?.id}:${loopId}`;

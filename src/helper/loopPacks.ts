@@ -1,14 +1,14 @@
 import Loopmaker from "../types/Loopmaker";
 import LoopPack from "../types/LoopPack";
-import { convertContentfulFileUrlToImageUrl } from "./image";
+import { convertContentfulFileUrlToImageUrl, DEFAULT_IMG_URL } from "./image";
 
 export const mapContentfulLoopPackResponseObjToLoopPackObj = (loopPack: any): LoopPack | null=> {
     try {
         const { id } = loopPack.sys;
         const { title, url, releaseDate, slug, loopmaker, artwork } = loopPack.fields;
-        const imageUrl = convertContentfulFileUrlToImageUrl(artwork.fields?.file?.url)
+        const imageUrl = artwork ? convertContentfulFileUrlToImageUrl(artwork.fields?.file?.url) : DEFAULT_IMG_URL
 
-        return {
+        const loopPackObj: LoopPack = {
             id,
             title,
             url,
@@ -26,8 +26,10 @@ export const mapContentfulLoopPackResponseObjToLoopPackObj = (loopPack: any): Lo
                 }
             })
         }
+
+        return loopPackObj;
     } catch (error) {
-        console.log(`error when mapping loopPack ${JSON.stringify(loopPack, null, 2)} - ${JSON.stringify(error, null, 2)}`);                
+        console.log(`error when mapping loopPack ${JSON.stringify(loopPack.fields.title, null, 2)} - ${JSON.stringify(error, null, 2)}`);                
         return null;  
     }
 }

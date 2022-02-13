@@ -1,6 +1,6 @@
 import { DynamoDB } from "aws-sdk";
 import { getClient } from "../../contentful/client"
-import { mapContentfulLoopResponseToLoopObj } from "../../helper/loop";
+import { mapContentfulLoopsResponseToLoopObj } from "../../helper/loop";
 import { mapContentfulSongResponseObjToSongObj } from "../../helper/song";
 import Song from "../../types/Song";
 
@@ -46,7 +46,7 @@ export default async function listLikes(
     const s = mapContentfulSongResponseObjToSongObj(item) as Song;
     const loopLookups = loopEntriesResponse.items.filter(loopResponse => s.loop.map(l => l.id).includes(loopResponse.sys.id))
     //console.log(`loopLookup ${JSON.stringify(loopLookup, null, 2)}`);
-    s.loop = mapContentfulLoopResponseToLoopObj(loopLookups[0])
+    s.loop = mapContentfulLoopsResponseToLoopObj(loopLookups[0])
 
     return s;
   })

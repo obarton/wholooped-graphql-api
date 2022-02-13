@@ -2,7 +2,7 @@
 import Song from "../../types/Song"
 import { getClient } from "../../contentful/client"
 import { mapContentfulSongResponseObjToSongObj } from "../../helper/song";
-import { mapContentfulLoopResponseToLoopObj } from "../../helper/loop";
+import { mapContentfulLoopsResponseToLoopObj } from "../../helper/loop";
 import getLikesCountById from "../likes/getLikesCountById";
 import getLikeById from "../likes/getLikeById";
 
@@ -22,7 +22,7 @@ export default async function getSongById(userId: string, songId: string): Promi
 
         // map to response object
         const songObj = mapContentfulSongResponseObjToSongObj(response);
-        (songObj as any).loop = mapContentfulLoopResponseToLoopObj(loopResponse);
+        (songObj as any).loop = mapContentfulLoopsResponseToLoopObj(loopResponse);
         (songObj as any).likesCount = likesCountResponse;
         (songObj as any).isLiked = isLikedResponse?.isLiked;
         

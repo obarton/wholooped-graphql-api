@@ -29,7 +29,6 @@ export default async function queryLoopPackBySlugs(loopmakerSlug: string, loopPa
             "fields.loopPack.sys.id": loopPack?.id
         })
         const loopIds = queryLoopsEntriesResponse.items.map((l: any) => l.sys.id)
-        console.log(`queryLoopsEntriesResponse.items ${JSON.stringify(queryLoopsEntriesResponse.items, null, 2)}`)
         
         const querySongEntriesResponse = await client.getEntries({
             content_type: "song",
@@ -39,7 +38,6 @@ export default async function queryLoopPackBySlugs(loopmakerSlug: string, loopPa
         const songResults = querySongEntriesResponse.items.map((songDataResponse: any): Song | null => {
             return mapContentfulSongResponseObjToSongObj(songDataResponse)
         })
-
 
         return {
             loopPack,

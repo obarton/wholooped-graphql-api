@@ -1,6 +1,11 @@
 import Loop from "../types/Loop"
+import { convertContentfulFileUrlToImageUrl } from "./image";
 
-export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any): Loop[] => {
+export const mapContentfulLoopsResponseToLoopObj = (contentfulLoopResponse: any): Loop[] => {
+    return [mapContentfulLoopResponseToLoopObj(contentfulLoopResponse)]
+}
+
+export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any): Loop => {
     const { id } = contentfulLoopResponse.sys;
     const { 
         title, 
@@ -14,8 +19,8 @@ export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any):
         loopPack
     } = contentfulLoopResponse.fields;
 
-    return [{
-        id: contentfulLoopResponse.sys.id,
+    return {
+        id,
         title:title,
         url: url,
         releaseDate: releaseDate,
@@ -36,9 +41,9 @@ export const mapContentfulLoopResponseToLoopObj = (contentfulLoopResponse: any):
             title: loopPack.fields.title,
             slug: loopPack.fields.slug,
             url: "",
-            imageUrl: loopPack.fields.file?.url,
+            imageUrl: convertContentfulFileUrlToImageUrl(loopPack.fields.artwork?.fields?.file?.url) || "",
             releaseDate: loopPack.fields.releaseDate,
             loopmaker: loopmaker
         }
-    }]
+    }
 }

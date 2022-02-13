@@ -253,6 +253,21 @@ export default class MyStack extends sst.Stack {
       },
     });
 
+    // Create the HTTP API
+    const loopApi = new sst.Api(this, "LoopApi", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string,  
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string
+        },
+      },
+      routes: {
+        "GET /loops/{loopmakerSlug}/{loopSlug}": "src/functions/loops/getLoopBySlug.main",
+      },
+    });
+
     // // Create the AppSync GraphQL API
     // const api = new sst.AppSyncApi(this, "AppSyncApi", {
     //   graphqlApi: {
@@ -325,7 +340,8 @@ export default class MyStack extends sst.Stack {
       SongEndpoint: songApi.url,
       SubmissionsEndpoint: submissionApi.url,
       LoopmakerEndpoint: loopmakerApi.url,
-      LoopPackEndpoint: loopPackApi.url
+      LoopPackEndpoint: loopPackApi.url,
+      LoopEndpoint: loopApi.url
     });
   }
 }
