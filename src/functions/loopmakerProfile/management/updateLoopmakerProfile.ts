@@ -43,6 +43,10 @@ async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loop
     'en-US': loopmakerProfileData.facebookUrl
   };
 
+  loopmakerProfile.fields.instagramUrl = { 
+    'en-US': loopmakerProfileData.instagramUrl
+  };
+
   if(loopmakerProfileData.profilePhoto) {
     loopmakerProfile.fields.profilePhoto = {
         'en-US': {
