@@ -16,7 +16,7 @@ async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loop
   let loopmakerProfile = await env.getEntry(loopmakerProfileId)
 
   loopmakerProfile.fields.name = { 
-    'en-US': loopmakerProfileData.name
+    'en-US': loopmakerProfileData.name?.trim()
   };
 
   loopmakerProfile.fields.username = { 
@@ -28,7 +28,7 @@ async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loop
   };
   
   loopmakerProfile.fields.bio = {
-      'en-US': loopmakerProfileData.bio
+      'en-US': loopmakerProfileData.bio?.trim()
   };
 
   loopmakerProfile.fields.websiteUrl = {
