@@ -227,7 +227,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopPackContentItems = await getLoopPackContentItems();
     const loopmakerContentItems = await getLoopmakerContentItems();
     const genreContentItems = await getGenreContentItems();
-    const loopContentItems = await getLoopContentItems();
+    //const loopContentItems = await getLoopContentItems();
     const dynamicContentItems = await getDynamicLoopContentContentItems();
 
     const songContentList = {
@@ -241,7 +241,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopPackContentList = {
         id: "2",
         title: "Trending Loop Packs",
-        description: "Popular loop packs on Who Looped",
+        description: "Popular loop packs on Who Looped.",
         type: "looppack",
         items: loopPackContentItems,
         showMoreLink: "/packs"
@@ -259,7 +259,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const artistContentList = {
         id: "4",
         title: "Trending Artists",
-        description: "Popular artists on Who Looped",
+        description: "Popular artists on Who Looped.",
         type: "artist",
         items: artistContentItems,
         showMoreLink: "/artists"
@@ -268,7 +268,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopmakerContentList = {
         id: "5",
         title: "Featured Loop Makers",
-        description: "A few of our favorite loop makers",
+        description: "A few of our favorite loop makers.",
         type: "loopmaker",
         items: loopmakerContentItems
     }
@@ -276,7 +276,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const genreContentList = {
         id: "6",
         title: "Genres",
-        description: "Explore loops by genre",
+        description: "Explore loops by genre.",
         type: "genre",
         items: genreContentItems
     }
