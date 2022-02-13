@@ -244,7 +244,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
         description: "Popular loop packs on Who Looped",
         type: "looppack",
         items: loopPackContentItems,
-        showMoreLink: "/looppacks"
+        showMoreLink: "/packs"
     }
 
     const loopContentList = {
