@@ -12,7 +12,6 @@ async function Connect() {
 }
 
 async function UpdateLoopmakerProfile(env: any, loopmakerProfileId: string, loopmakerProfileData: LoopmakerProfile) {
-  //console.log(`loopmakerProfileData ${JSON.stringify(loopmakerProfileData, null, 2)}`)
   let loopmakerProfile = await env.getEntry(loopmakerProfileId)
 
   loopmakerProfile.fields.name = { 

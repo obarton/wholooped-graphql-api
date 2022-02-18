@@ -1,5 +1,5 @@
 import Loopmaker from "../types/Loopmaker";
-import { convertContentfulFileUrlToImageUrl } from "./image";
+import { convertContentfulFileUrlToImageUrl, DEFAULT_HEADER_IMG_URL } from "./image";
 
 export const mapContentfulLoopmakerResponseObjToLoopmakerObj = (contentfulLoopmakerResponseObj: any): Loopmaker | null=> {
     try {
