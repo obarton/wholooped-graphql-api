@@ -232,8 +232,8 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
 
     const songContentList = {
         id: "1",
-        title: "Recently Added",
-        description: "",
+        title: "Added This Week",
+        description: "This week's latest uploads",
         type: "song",
         items: songContentItems
     }
@@ -241,7 +241,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopPackContentList = {
         id: "2",
         title: "Trending Loop Packs",
-        description: "Popular loop packs on Who Looped.",
+        description: "Popular loop packs on Who Looped",
         type: "looppack",
         items: loopPackContentItems,
         showMoreLink: "/packs"
@@ -250,7 +250,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopContentList = {
         id: "3",
         title: "Vintage Sounds",
-        description: "Loops with warmth and textures reminiscent of classic analog hardware.",
+        description: "Loops with warmth and textures reminiscent of classic analog hardware",
         type: "loop",
         items: dynamicContentItems
         //showMoreLink: "/looppacks"
@@ -259,7 +259,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const artistContentList = {
         id: "4",
         title: "Trending Artists",
-        description: "Popular artists on Who Looped.",
+        description: "Popular artists on Who Looped",
         type: "artist",
         items: artistContentItems,
         showMoreLink: "/artists"
@@ -268,7 +268,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const loopmakerContentList = {
         id: "5",
         title: "Featured Loop Makers",
-        description: "A few of our favorite loop makers.",
+        description: "A few of our favorite loop makers",
         type: "loopmaker",
         items: loopmakerContentItems
     }
@@ -276,7 +276,7 @@ export async function getDefaultContentLists(): Promise<ContentList[]> {
     const genreContentList = {
         id: "6",
         title: "Genres",
-        description: "Explore loops by genre.",
+        description: "Explore loops by genre",
         type: "genre",
         items: genreContentItems
     }
