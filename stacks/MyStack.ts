@@ -31,6 +31,15 @@ export default class MyStack extends sst.Stack {
       primaryIndex: { partitionKey: "userId", sortKey: "submissionId" },
     });
 
+    // Create a submissions table
+    const nftSubmissionsTable = new sst.Table(this, "NftSubmissions", {
+      fields: {
+        userId: sst.TableFieldType.STRING,
+        id: sst.TableFieldType.STRING,
+      },
+      primaryIndex: { partitionKey: "userId", sortKey: "id" },
+    });
+
     // Create Queue
     const queue = new sst.Queue(this, "Queue", {
       consumer: "src/interactionsQueueConsumer.main",
@@ -268,51 +277,22 @@ export default class MyStack extends sst.Stack {
       },
     });
 
-    // // Create the AppSync GraphQL API
-    // const api = new sst.AppSyncApi(this, "AppSyncApi", {
-    //   graphqlApi: {
-    //     schema: "graphql/schema.graphql",
-    //   },
-    //   defaultFunctionProps: {
-    //     // Pass the table name to the function
-    //     environment: {
-    //       queueUrl: queue.sqsQueue.queueUrl,
-    //       LIKES_TABLE: likesTable.dynamodbTable.tableName,
-    //       LIKES_COUNT_TABLE: likesCountTable.dynamodbTable.tableName,
-    //       SUBMISSIONS_TABLE: submissionsTable.dynamodbTable.tableName,
-    //       CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string, 
-    //       CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string
-    //     },
-    //   },
-    //   dataSources: {
-    //     loopPacks: "src/handlers/loopPacks.handler",
-    //     likes: "src/handlers/likes.handler",
-    //     songs: "src/handlers/songs.handler",
-    //     artists: "src/handlers/artists.handler",
-    //     genres: "src/handlers/genres.handler",
-    //     submissions: "src/handlers/submissions.handler",
-    //     content: "src/handlers/content.handler"
-    //   },
-    //   resolvers: {
-    //     "Query    listLikes": "likes",
-    //     "Query    getLikeById": "likes",
-    //     "Mutation createLike": "likes",
-    //     "Mutation updateLike": "likes",
-    //     "Mutation deleteLike": "likes",
-    //     "Query    listSongs": "songs",
-    //     "Query    getSongById": "songs",
-    //     "Query    querySongByArtist": "songs",
-    //     "Query    listArtists": "artists",
-    //     "Query    listLoopPacks": "loopPacks",
-    //     "Query    listGenres": "genres",
-    //     "Query    listSubmissions": "submissions",
-    //     "Query    getSubmissionById": "submissions",
-    //     "Mutation createSubmission": "submissions",
-    //     "Mutation updateSubmission": "submissions",
-    //     "Mutation deleteSubmission": "submissions",
-    //     "Query    getContentLists": "content",
-    //   },
-    // });
+    // Create the HTTP API
+    const web3Api = new sst.Api(this, "Web3Api", {
+      defaultFunctionProps: {
+        // Pass in the queue to our API
+        environment: {
+          CONTENTFUL_CDA_ACCESS_TOKEN: process.env.CONTENTFUL_CDA_ACCESS_TOKEN as string,  
+          CONTENTFUL_SPACE_ID: process.env.CONTENTFUL_SPACE_ID as string,
+          CONTENTFUL_ENV_ID: process.env.CONTENTFUL_ENV_ID as string,
+          SENDGRID_API_KEY: process.env.SENDGRID_API_KEY as string,
+          NFT_SUBMISSIONS_TABLE: nftSubmissionsTable.dynamodbTable.tableName,
+        },
+      },
+      routes: {
+        "POST /nft/submit": "src/functions/web3/submitNft.main",
+      },
+    });
 
     // Enable the AppSync API to access the DynamoDB table
     // api.attachPermissions([likesTable, likesCountTable, submissionsTable]);
@@ -321,6 +301,7 @@ export default class MyStack extends sst.Stack {
     songApi.attachPermissions([likesTable, likesCountTable]);
     submissionApi.attachPermissions([submissionsTable])
     likesApi.attachPermissions([likesTable, likesCountTable])
+    web3Api.attachPermissions([nftSubmissionsTable])
 
     // Show the AppSync API Id in the output
     this.addOutputs({
@@ -341,7 +322,8 @@ export default class MyStack extends sst.Stack {
       SubmissionsEndpoint: submissionApi.url,
       LoopmakerEndpoint: loopmakerApi.url,
       LoopPackEndpoint: loopPackApi.url,
-      LoopEndpoint: loopApi.url
+      LoopEndpoint: loopApi.url,
+      Web3Endpoint: web3Api.url
     });
   }
 }
