@@ -119,11 +119,12 @@ export async function  getLoopPackContentItems(): Promise<Content[]> {
 export async function  getLoopmakerContentItems(): Promise<Content[]> {
     const loopMakerEntriesResponse = await client.getEntries({
         content_type: 'loopmaker',
+        "fields.isFeatured": true,
         limit: 15
     })   
 
     const loopmakerFilter = (loopmaker: any) => {
-        return loopmaker.profilePhoto?.url !== null && loopmaker.id !== "2a356d22-645b-4eee-babf-edf4d6797d09" && loopmaker?.isFeatured == true
+        return loopmaker.profilePhoto?.url !== null && loopmaker.id !== "2a356d22-645b-4eee-babf-edf4d6797d09"
     }
 
     const loopmakerLists = loopMakerEntriesResponse.items.map((loopmakerResponse : any): Loopmaker | null => {
